@@ -1,0 +1,29 @@
+# ── 비밀키 · 환경변수 (절대 커밋 금지) ──────────────────────────────
+.env
+.env.*
+!.env.example
+backend/.env
+frontend/.env
+frontend/.env.local
+
+# ── 파이썬 ──────────────────────────────────────────────────────
+.venv/
+backend/.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# ── 노드 · 빌드 산출물 ───────────────────────────────────────────
+node_modules/
+frontend/node_modules/
+frontend/dist/
+*.tsbuildinfo
+
+# ── 에디터 · OS ─────────────────────────────────────────────────
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# ── 배포 도구 ───────────────────────────────────────────────────
+.vercel/
