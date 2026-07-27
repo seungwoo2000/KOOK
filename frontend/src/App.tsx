@@ -201,7 +201,17 @@ async function loadEverywhere(key: string): Promise<SavedItem[]> {
       createdAt: r.created_at,
       menus: r.payload?.menus || [],
     }));
-    return items;
+    // 서버 저장이 실패했던 항목은 로컬에만 남아 있다. 서버 목록으로 덮어쓰면
+    // 방금 저장한 게 사라져 보이므로, 서버에 없는 로컬 항목은 함께 보여준다.
+    const seen = new Set(
+      items.map((x) => `${x.title}|${x.subtitle}|${x.createdAt?.slice(0, 16)}`),
+    );
+    const extras = local.filter(
+      (x) => !seen.has(`${x.title}|${x.subtitle}|${x.createdAt?.slice(0, 16)}`),
+    );
+    return [...extras, ...items].sort((a, b) =>
+      String(b.createdAt).localeCompare(String(a.createdAt)),
+    );
   } catch {
     return local;
   }
@@ -707,16 +717,20 @@ function Shell({
   children,
   footer,
   header = true,
+  full = false,
 }: {
   children: any;
   footer?: any;
   header?: boolean;
+  full?: boolean;      // 이미지 한 장이 화면 전체를 채울 때 본문 여백을 없앤다
 }) {
   return (
     <main className="page">
       <div className="phone">
         {header && <Header />}
-        <section className="screen">{children}</section>
+        <section className={full ? "screen screen-full" : "screen"}>
+          {children}
+        </section>
         {footer && <footer className="footer">{footer}</footer>}
       </div>
     </main>
@@ -844,6 +858,29 @@ const slides = [
 ] as const;
 // 첫 화면: "오늘 뭐 먹지?" 스플래시. 시작하기를 누르면 온보딩 5단계로 들어간다.
 function Splash({ onStart }: { onStart: () => void }) {
+  // 준비된 홈 이미지가 있으면 그 한 장을 쓰고, 없으면 아래의 기본 화면으로 대체한다.
+  // 이미지 안에 '시작하기' 버튼이 그려져 있어 아래쪽을 잘라내고, 실제 버튼은 하단에 둔다.
+  const [shotFailed, setShotFailed] = useState(false);
+  if (!shotFailed)
+    return (
+      <Shell
+        header={false}
+        full
+        footer={
+          <button className="btn btn-pill" onClick={onStart}>
+            시작하기 <i className="btn-arrow">→</i>
+          </button>
+        }
+      >
+        <div className="splash-shot">
+          <img
+            src="/assets/onboarding-home.png"
+            alt="오늘 뭐 먹지? 고민에 푹 빠질 땐 KOOK이 도와드립니다"
+            onError={() => setShotFailed(true)}
+          />
+        </div>
+      </Shell>
+    );
   return (
     <Shell
       header={false}
@@ -882,6 +919,8 @@ function Onboarding() {
   // URL로 단계를 구분한다. /onboarding = 스플래시, /onboarding/1~5 = 각 단계 화면.
   const { step } = useParams();
   const nav = useNavigate();
+  const [shotFailed, setShotFailed] = useState(false);
+  useEffect(() => setShotFailed(false), [step]);
   const finish = () => nav("/login");
   if (!step) return <Splash onStart={() => nav("/onboarding/1")} />;
   const n = Number(step);
@@ -901,21 +940,39 @@ function Onboarding() {
       nextLabel={last ? "시작" : "다음"}
     />
   );
+  // 단계 이미지가 준비돼 있으면 그 이미지 한 장이 곧 화면이다.
+  // (이미지 안에 제목과 1/5 배지가 이미 들어 있어서 화면 텍스트와 겹치지 않게 감춘다)
+  const shot = ONBOARDING_IMAGE[s[3]];
   return (
-    <Shell header={false} footer={footer}>
-      <div className="onboarding-top">
-        <button className="skip" onClick={finish}>
-          건너뛰기
-        </button>
-        <span className="step-count">
-          {i + 1} / {slides.length}
-        </span>
-      </div>
-      <h1 className="onboarding-title">
-        <b>{s[0]}</b> {s[1]}
-      </h1>
-      <p className="sub center">{s[2]}</p>
-      <OnboardingVisual type={s[3]} />
+    <Shell header={false} footer={footer} full={!!shot && !shotFailed}>
+      {shot && !shotFailed ? (
+        <div className="onboarding-page">
+          <img
+            src={shot}
+            alt={`${s[0]} ${s[1]} — ${s[2]}`}
+            onError={() => setShotFailed(true)}
+          />
+          <button className="skip float" onClick={finish}>
+            건너뛰기
+          </button>
+        </div>
+      ) : (
+        <>
+          <div className="onboarding-top">
+            <button className="skip" onClick={finish}>
+              건너뛰기
+            </button>
+            <span className="step-count">
+              {i + 1} / {slides.length}
+            </span>
+          </div>
+          <h1 className="onboarding-title">
+            <b>{s[0]}</b> {s[1]}
+          </h1>
+          <p className="sub center">{s[2]}</p>
+          <OnboardingVisual type={s[3]} />
+        </>
+      )}
     </Shell>
   );
 }
@@ -927,6 +984,25 @@ const PREVIEW_MENUS = [
   ["애호박전", "반찬"],
   ["저염 배추김치", "반찬"],
 ] as const;
+// 온보딩 단계별 이미지. public/assets 에 파일이 있으면 그 이미지를 쓰고,
+// 없으면(파일 미준비) 아래의 CSS 미리보기로 자동 대체된다.
+const ONBOARDING_IMAGE: Record<string, string> = {
+  search: "/assets/onboarding-1.png",
+  meal: "/assets/onboarding-2.png",
+  nutrition: "/assets/onboarding-3.png",
+  adjust: "/assets/onboarding-4.png",
+  final: "/assets/onboarding-5.png",
+};
+function OnboardingShot({ type, children }: { type: string; children: any }) {
+  const src = ONBOARDING_IMAGE[type];
+  const [failed, setFailed] = useState(false);
+  if (!src || failed) return children;
+  return (
+    <figure className="onboarding-shot">
+      <img src={src} alt="" onError={() => setFailed(true)} />
+    </figure>
+  );
+}
 function OnboardingVisual({ type }: { type: string }) {
   if (type === "search")
     return (
@@ -1085,6 +1161,7 @@ function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [show, setShow] = useState(false);
+  const [askTry, setAskTry] = useState(false); // 체험 전 가상 프로필 안내
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
   const submit = async () => {
@@ -1185,11 +1262,47 @@ function Login() {
             직접 체험해보세요.
           </small>
         </div>
-        <button className="guest-cta" onClick={tryGuest}>
+        <button className="guest-cta" onClick={() => setAskTry(true)}>
           체험하기 →
         </button>
       </div>
       <p className="guest-note">※ 체험은 예시 프로필을 기반으로 진행됩니다.</p>
+      {/* 체험 시작 전에 어떤 기준으로 계산되는지 먼저 알린다 */}
+      {askTry && (
+        <div className="modal-bg" onClick={() => setAskTry(false)}>
+          <div className="modal ask" onClick={(e) => e.stopPropagation()}>
+            <span className="modal-mark">👤</span>
+            <h2>가상의 프로필로 진행됩니다</h2>
+            <p>
+              회원님의 정보가 아직 없어서
+              <br />
+              아래 예시 프로필 기준으로 영양을 계산해요.
+            </p>
+            <div className="guest-profile">
+              <div>
+                <small>성별 · 나이</small>
+                <b>남성 · 65세</b>
+              </div>
+              <div>
+                <small>키 · 체중</small>
+                <b>170cm · 60kg</b>
+              </div>
+              <div>
+                <small>투석 유형</small>
+                <b>혈액투석</b>
+              </div>
+            </div>
+            <div className="ask-actions">
+              <button className="ask-no" onClick={() => setAskTry(false)}>
+                취소
+              </button>
+              <button className="ask-yes" onClick={tryGuest}>
+                체험 진행하기
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </Shell>
   );
 }
@@ -2646,6 +2759,7 @@ function FinalMeal() {
   };
   const [savingKey, setSavingKey] = useState<string | null>(null);
   const [openRecipe, setOpenRecipe] = useState(""); // 인라인으로 펼친 레시피
+  const [askJoin, setAskJoin] = useState(false); // 비회원 체험 종료 시 회원가입 안내
   const save = async (key: string, msg: string) => {
     if (!requireUser(nav)) return;
     setSavingKey(key);
@@ -2666,7 +2780,8 @@ function FinalMeal() {
           step={5}
           total={5}
           onPrev={() => nav("/comparison")}
-          onNext={() => nav("/home")}
+          // 비회원 체험이면 여기서 끝내지 않고 회원가입 안내를 먼저 띄운다.
+          onNext={() => (currentUser() ? nav("/home") : setAskJoin(true))}
           nextLabel="완료"
         />
       }
@@ -2686,11 +2801,11 @@ function FinalMeal() {
       {/* 하단 탭: 기록 저장 · 홈 · PDF 다운로드 (장바구니 탭은 뺐다) */}
       <div className="final-tabs">
         <button
-          disabled={savingKey === "fook:history"}
-          onClick={() => save("fook:history", "식단 기록에 저장했어요.")}
+          disabled={savingKey === "fook:favorites"}
+          onClick={() => save("fook:favorites", "저장된 식단에 추가했어요.")}
         >
           <BookmarkIcon />
-          <span>{savingKey === "fook:history" ? "저장 중..." : "기록 저장"}</span>
+          <span>{savingKey === "fook:favorites" ? "저장 중..." : "저장하기"}</span>
         </button>
         <button onClick={() => nav("/home")}>
           <HomeIcon />
@@ -2704,6 +2819,32 @@ function FinalMeal() {
       <h2 className="section-title with-icon">📖 레시피 보러가기</h2>
       {/* 새 화면으로 넘어가지 않고 고른 음식의 레시피를 이 자리에서 펼친다 */}
       <RecipeList selected={openRecipe} onSelect={setOpenRecipe} />
+      {/* 비회원 체험을 마쳤을 때만 뜨는 회원가입 안내 */}
+      {askJoin && (
+        <div className="modal-bg" onClick={() => setAskJoin(false)}>
+          <div className="modal ask" onClick={(e) => e.stopPropagation()}>
+            <span className="modal-mark">🍚</span>
+            <h2>
+              회원가입하면 개인 맞춤형 식단을
+              <br />
+              제공받을 수 있어요
+            </h2>
+            <p>
+              키 체중, 투석 유형을 등록하면
+              <br />
+              내 기준에 맞춘 영양 계산과 식단 저장 등을 쓸 수 있어요
+            </p>
+            <div className="ask-actions">
+              <button className="ask-no" onClick={() => nav("/login")}>
+                나중에
+              </button>
+              <button className="ask-yes" onClick={() => nav("/login")}>
+                회원가입 하러가기
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </Shell>
   );
 }
@@ -2741,6 +2882,8 @@ function RecipeBody({ menuName }: { menuName: string }) {
   const [steps, setSteps] = useState<string[] | null>(null);
   const [loadingRecipe, setLoadingRecipe] = useState(false);
   const [recipeError, setRecipeError] = useState("");
+  // 음성 안내 팝업에서 지금 읽고 있는 단계 (-1 = 팝업 닫힘)
+  const [voiceStep, setVoiceStep] = useState(-1);
   const speech = useSpeech();
 
   useEffect(() => {
@@ -2862,14 +3005,82 @@ function RecipeBody({ menuName }: { menuName: string }) {
           {displaySteps.length > 0 && (
             <div className="tts-row right">
               <button
-                className={speech.speaking ? "tts-button on" : "tts-button"}
-                onClick={() =>
-                  speech.speaking ? speech.stop() : speech.speak(recipeSpeech)
-                }
+                className="tts-button"
+                onClick={() => {
+                  setVoiceStep(0);
+                  speech.speak(`${menuName} 조리 순서입니다. 1번. ${displaySteps[0]}`);
+                }}
               >
                 <SpeakerIcon />
-                {speech.speaking ? " 음성 멈추기" : " 음성 안내 받기"}
+                {" 음성 안내 받기"}
               </button>
+            </div>
+          )}
+          {/* 음성 안내 팝업 — 조리 단계를 하나씩 읽어준다 */}
+          {voiceStep >= 0 && (
+            <div
+              className="modal-bg"
+              onClick={() => {
+                speech.stop();
+                setVoiceStep(-1);
+              }}
+            >
+              <div className="modal voice" onClick={(e) => e.stopPropagation()}>
+                <div className="voice-head">
+                  <span className="voice-count">
+                    {voiceStep + 1} / {displaySteps.length}
+                  </span>
+                  <button
+                    className="voice-close"
+                    aria-label="닫기"
+                    onClick={() => {
+                      speech.stop();
+                      setVoiceStep(-1);
+                    }}
+                  >
+                    ✕
+                  </button>
+                </div>
+                <p className="voice-menu">{menuName}</p>
+                <div className="voice-body">
+                  <span className="voice-num">{voiceStep + 1}</span>
+                  <p>{displaySteps[voiceStep]}</p>
+                </div>
+                <div className="ask-actions">
+                  <button
+                    className="ask-no"
+                    onClick={() =>
+                      speech.speak(
+                        `${voiceStep + 1}번. ${displaySteps[voiceStep]}`,
+                      )
+                    }
+                  >
+                    {speech.speaking ? "다시 듣기" : "다시 듣기"}
+                  </button>
+                  {voiceStep < displaySteps.length - 1 ? (
+                    <button
+                      className="ask-yes"
+                      onClick={() => {
+                        const next = voiceStep + 1;
+                        setVoiceStep(next);
+                        speech.speak(`${next + 1}번. ${displaySteps[next]}`);
+                      }}
+                    >
+                      다음 →
+                    </button>
+                  ) : (
+                    <button
+                      className="ask-yes"
+                      onClick={() => {
+                        speech.stop();
+                        setVoiceStep(-1);
+                      }}
+                    >
+                      완료
+                    </button>
+                  )}
+                </div>
+              </div>
             </div>
           )}
         </>
@@ -3144,13 +3355,26 @@ function PdfPreview() {
         backgroundColor: "#fff",
       });
       const pdf = new jsPDF("p", "mm", "a4");
+      // A4 한 장(210×297mm) 안에 반드시 들어가게 한다.
+      // 가로를 먼저 맞춰보고, 그래도 세로가 넘치면 세로 기준으로 다시 줄인다.
+      const PAGE_W = 210;
+      const PAGE_H = 297;
+      const MARGIN = 8;
+      const maxW = PAGE_W - MARGIN * 2;
+      const maxH = PAGE_H - MARGIN * 2;
+      let w = maxW;
+      let h = (canvas.height * w) / canvas.width;
+      if (h > maxH) {
+        h = maxH;
+        w = (canvas.width * h) / canvas.height;
+      }
       pdf.addImage(
         canvas.toDataURL("image/jpeg", 0.96),
         "JPEG",
-        10,
-        8,
-        190,
-        (canvas.height * 190) / canvas.width,
+        (PAGE_W - w) / 2,
+        MARGIN,
+        w,
+        h,
       );
       pdf.save(`KOOK_${plan.menus[1]}_맞춤한끼.pdf`);
       if (currentUser())
@@ -3189,7 +3413,7 @@ function PdfPreview() {
           </div>
         </div>
         <h2>{plan.menus[1]} 한 끼</h2>
-        <div className="pdf-hero-space" />
+        {/* 사진 자리(pdf-hero-space)는 뺐다. A4 한 장에 담기지 않아서 표를 위로 당긴다. */}
         <h3>한 끼 전체 레시피</h3>
         <table className="meal-recipe-table">
           <thead>
@@ -3277,7 +3501,7 @@ function BottomNav({
   // 목업 하단 탭: 홈 / 저장된 식단 / 프로필 3개
   const items = [
     ["home", <HomeIcon key="h" />, "홈", "/home"],
-    ["history", <ClipboardIcon key="c" />, "저장된 식단", "/history"],
+    ["favorites", <ClipboardIcon key="c" />, "저장된 식단", "/favorites"],
     ["account", <UserIcon key="u" />, "프로필", "/account"],
   ] as const;
   return (
