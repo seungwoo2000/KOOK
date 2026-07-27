@@ -349,39 +349,42 @@
 /* ============================================================================
    v22 — 스플래시 이미지 · 체험 안내 팝업 · 저장 목적지 통일
    ========================================================================== */
-/* 스플래시: 이미지 한 장이 화면 전체.
-   그림 속 '시작하기' 버튼은 일러스트 위에 겹쳐 그려져 있어 잘라내면 인물까지 잘린다.
-   그래서 버튼은 그대로 두고 그 자리에 투명한 진짜 버튼을 겹친다.
-   위쪽에 남는 공간은 이미지 배경색과 같아 이어져 보인다. */
+/* 스플래시: 시안 이미지를 손대지 않고 그대로 한 화면으로 쓴다.
+   그림 속 '시작하기' 버튼 위에 투명한 진짜 버튼만 겹쳐 눌리게 하고,
+   그림에 박힌 '9:41' 자리는 배경색으로 덮은 뒤 실제 현재 시각을 올린다.
+   (위치 값은 이미지에서 픽셀 단위로 실측한 비율) */
 .splash-shot {
   width: 100%; height: 100%;
-  background: #FAF4ED;
+  background: #FAF4EC;
   display: flex; align-items: flex-end; justify-content: center;
   overflow: hidden;
 }
 .splash-frame { position: relative; width: 100%; }
 .splash-frame img { display: block; width: 100%; height: auto; }
 
-/* 그림 속 버튼 위에 겹치는 투명 버튼 (이미지에서 실측한 비율) */
+/* 그림 속 버튼 위 투명 버튼 */
 .splash-hit {
   position: absolute;
-  left: 10.1%; right: 12.5%; top: 82.3%; bottom: 2.9%;
+  left: 10.1%; right: 12.5%; top: 83.4%; bottom: 2.7%;
   border: 0; background: transparent; padding: 0;
   border-radius: 999px; cursor: pointer;
 }
 .splash-hit:focus-visible { outline: 3px solid var(--gd); outline-offset: 3px; }
-.splash-hit:active { background: rgba(0, 0, 0, .06); }
+.splash-hit:active { background: rgba(0, 0, 0, .07); }
 
-/* 현재 시각 — 그림 속 가짜 상태바를 지운 자리에 실제 시간을 얹는다 */
+/* 실제 현재 시각 — 그림의 '9:41'을 덮는다 */
 .now-clock {
   font-variant-numeric: tabular-nums;
-  font-weight: 800; color: var(--ink);
-  letter-spacing: -.01em;
+  font-weight: 700; letter-spacing: -.01em; color: #1B1B1F;
 }
 .now-clock.on-shot {
-  position: absolute; top: 2.2%; left: 6.5%;
-  font-size: clamp(14px, 4.2cqi, 19px);
-  color: #1E2A20;
+  position: absolute;
+  top: 1.5%; left: 4.6%;
+  min-width: 9.5%; padding: 0.35% 0.6%;
+  background: #FAF4EC;               /* 그림 배경과 동일 — 9:41을 가린다 */
+  font-size: clamp(13px, 3.9cqi, 18px);
+  line-height: 1.35;
+  text-align: center;
 }
 
 /* 체험 안내 팝업의 예시 프로필 표 */

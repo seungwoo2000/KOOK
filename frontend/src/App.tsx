@@ -896,7 +896,9 @@ function Splash({ onStart }: { onStart: () => void }) {
               alt="오늘 뭐 먹지? 고민에 푹 빠질 땐 KOOK이 도와드립니다"
               onError={() => setShotFailed(true)}
             />
+            {/* 그림에 박힌 '9:41'을 배경색으로 덮고 실제 현재 시각을 올린다 */}
             <NowClock className="on-shot" />
+            {/* 그림 속 '시작하기' 버튼 위에 겹치는 투명 버튼 */}
             <button
               className="splash-hit"
               onClick={onStart}
