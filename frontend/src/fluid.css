@@ -349,15 +349,21 @@
 /* ============================================================================
    v22 — 스플래시 이미지 · 체험 안내 팝업 · 저장 목적지 통일
    ========================================================================== */
-/* 스플래시: 이미지 안에 그려진 '시작하기' 버튼은 잘라내고, 실제 버튼은 하단 푸터에 둔다 */
+/* 스플래시: 이미지 파일에서 '시작하기' 버튼 부분은 이미 잘라냈다(실제 버튼은 푸터에 있음).
+   clip-path는 레이아웃 공간을 그대로 차지해 버튼 위에 빈칸이 생기므로 쓰지 않는다.
+   이미지를 아래쪽에 붙여, 남는 공간은 위(로고 쪽 여백)로 보낸다. */
 .splash-shot {
   width: 100%; height: 100%;
-  display: flex; align-items: flex-start; justify-content: center;
+  /* 이미지 배경과 같은 색 — 위쪽에 남는 공간이 이어져 보이도록 */
+  background: #FAF4ED;
+  display: flex; align-items: flex-end; justify-content: center;
   overflow: hidden;
 }
 .splash-shot img {
-  width: 100%; height: auto; display: block;
-  clip-path: inset(0 0 11% 0);
+  display: block;
+  width: 100%; height: auto;
+  max-height: 100%;
+  object-fit: contain; object-position: bottom center;
 }
 
 /* 체험 안내 팝업의 예시 프로필 표 */
