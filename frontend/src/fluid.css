@@ -349,21 +349,39 @@
 /* ============================================================================
    v22 — 스플래시 이미지 · 체험 안내 팝업 · 저장 목적지 통일
    ========================================================================== */
-/* 스플래시: 이미지 파일에서 '시작하기' 버튼 부분은 이미 잘라냈다(실제 버튼은 푸터에 있음).
-   clip-path는 레이아웃 공간을 그대로 차지해 버튼 위에 빈칸이 생기므로 쓰지 않는다.
-   이미지를 아래쪽에 붙여, 남는 공간은 위(로고 쪽 여백)로 보낸다. */
+/* 스플래시: 이미지 한 장이 화면 전체.
+   그림 속 '시작하기' 버튼은 일러스트 위에 겹쳐 그려져 있어 잘라내면 인물까지 잘린다.
+   그래서 버튼은 그대로 두고 그 자리에 투명한 진짜 버튼을 겹친다.
+   위쪽에 남는 공간은 이미지 배경색과 같아 이어져 보인다. */
 .splash-shot {
   width: 100%; height: 100%;
-  /* 이미지 배경과 같은 색 — 위쪽에 남는 공간이 이어져 보이도록 */
   background: #FAF4ED;
   display: flex; align-items: flex-end; justify-content: center;
   overflow: hidden;
 }
-.splash-shot img {
-  display: block;
-  width: 100%; height: auto;
-  max-height: 100%;
-  object-fit: contain; object-position: bottom center;
+.splash-frame { position: relative; width: 100%; }
+.splash-frame img { display: block; width: 100%; height: auto; }
+
+/* 그림 속 버튼 위에 겹치는 투명 버튼 (이미지에서 실측한 비율) */
+.splash-hit {
+  position: absolute;
+  left: 10.1%; right: 12.5%; top: 82.3%; bottom: 2.9%;
+  border: 0; background: transparent; padding: 0;
+  border-radius: 999px; cursor: pointer;
+}
+.splash-hit:focus-visible { outline: 3px solid var(--gd); outline-offset: 3px; }
+.splash-hit:active { background: rgba(0, 0, 0, .06); }
+
+/* 현재 시각 — 그림 속 가짜 상태바를 지운 자리에 실제 시간을 얹는다 */
+.now-clock {
+  font-variant-numeric: tabular-nums;
+  font-weight: 800; color: var(--ink);
+  letter-spacing: -.01em;
+}
+.now-clock.on-shot {
+  position: absolute; top: 2.2%; left: 6.5%;
+  font-size: clamp(14px, 4.2cqi, 19px);
+  color: #1E2A20;
 }
 
 /* 체험 안내 팝업의 예시 프로필 표 */
