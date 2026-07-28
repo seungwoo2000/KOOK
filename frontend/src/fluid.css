@@ -459,4 +459,8 @@
   object-fit: contain;
   mix-blend-mode: multiply;
 }
-.skip.float.right { left: auto; right: var(--sp-sm); }
+/* 건너뛰기는 위쪽 가운데 — 왼쪽 로고, 오른쪽 n/5 배지와 겹치지 않는 자리 */
+.skip.float.right {
+  left: 50%; right: auto;
+  transform: translateX(-50%);
+}
