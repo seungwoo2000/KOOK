@@ -49,7 +49,11 @@ app = FastAPI(title='FOOK 통합 API', version='10.0.0')
 origins = [x.strip() for x in os.getenv(
     'CORS_ORIGINS', 'http://localhost:5173,http://127.0.0.1:5173'
 ).split(',') if x.strip()]
-app.add_middleware(CORSMiddleware, allow_origins=origins, allow_credentials=True,
+# Vercel은 배포할 때마다 미리보기 주소(kook-xxxx-seungwoo.vercel.app)가 새로 생긴다.
+# 주소를 매번 등록할 수 없으므로 *.vercel.app 은 정규식으로 한 번에 허용한다.
+origin_regex = os.getenv('CORS_ORIGIN_REGEX', r'https://.*\.vercel\.app')
+app.add_middleware(CORSMiddleware, allow_origins=origins,
+                   allow_origin_regex=origin_regex, allow_credentials=True,
                    allow_methods=['*'], allow_headers=['*'])
 
 # 선택 가능한 메뉴/재료 목록 (프론트 자동완성용) — AI 엔진의 CSV 기준 (월 824 + 군 260)

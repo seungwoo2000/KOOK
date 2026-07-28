@@ -86,12 +86,29 @@ const useApp = () => {
   return v;
 };
 type SavedUser = { id: string; username: string; name: string };
+// 끼니 구분 — 식단 관리 화면에서 아침/점심/저녁 섹션으로 나누는 기준
+type MealTime = "아침" | "점심" | "저녁";
+const MEAL_TIMES: MealTime[] = ["아침", "점심", "저녁"];
+// 지금 시각으로 기본 끼니를 고른다 (10시 전 아침, 15시 전 점심, 그 뒤 저녁)
+function defaultMealTime(): MealTime {
+  const h = new Date().getHours();
+  return h < 10 ? "아침" : h < 15 ? "점심" : "저녁";
+}
+// <input type="date">에 넣을 오늘 날짜 (YYYY-MM-DD)
+function todayISO(): string {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(
+    d.getDate(),
+  ).padStart(2, "0")}`;
+}
 type SavedItem = {
   id: string;
   title: string;
   subtitle: string;
   createdAt: string;
   menus?: readonly string[];
+  mealDate?: string;      // 사용자가 고른 날짜 (YYYY-MM-DD)
+  mealTime?: MealTime;    // 사용자가 고른 끼니
 };
 const storage = {
   get<T>(key: string, fallback: T): T {
@@ -180,7 +197,12 @@ async function saveEverywhere(key: string, item: SavedItem) {
       body: JSON.stringify({
         title: item.title,
         subtitle: item.subtitle,
-        payload: { menus: item.menus, createdAt: item.createdAt },
+        payload: {
+          menus: item.menus,
+          createdAt: item.createdAt,
+          mealDate: item.mealDate,
+          mealTime: item.mealTime,
+        },
       }),
     });
   } catch {
@@ -200,6 +222,8 @@ async function loadEverywhere(key: string): Promise<SavedItem[]> {
       subtitle: r.subtitle || "",
       createdAt: r.created_at,
       menus: r.payload?.menus || [],
+      mealDate: r.payload?.mealDate,
+      mealTime: r.payload?.mealTime,
     }));
     // 서버 저장이 실패했던 항목은 로컬에만 남아 있다. 서버 목록으로 덮어쓰면
     // 방금 저장한 게 사라져 보이므로, 서버에 없는 로컬 항목은 함께 보여준다.
@@ -1133,7 +1157,7 @@ function OnboardingVisual({ type }: { type: string }) {
       </div>
       <div className="preview-actions">
         <span>
-          <BookmarkIcon /> 저장하기
+          <BookmarkIcon /> 기록하기
         </span>
         <span>
           <DocIcon /> PDF 다운로드
@@ -1811,7 +1835,7 @@ function ProfileSetup() {
         </label>
         {error && <p className="form-error">{error}</p>}
       </div>
-      <h2 className="section-title">투석 방법</h2>
+      <h2 className="section-title">투석 유형</h2>
       <div className="dialysis-cards">
         <button className="dialysis-card selected">
           <div className="medical-icon">HD</div>
@@ -2762,6 +2786,60 @@ function Comparison() {
     </Shell>
   );
 }
+// 식단을 기록할 때 날짜와 끼니를 고르는 팝업.
+// 여기서 고른 값에 따라 '식단 관리'의 아침/점심/저녁 섹션으로 들어간다.
+function MealSlotDialog({
+  onCancel,
+  onConfirm,
+}: {
+  onCancel: () => void;
+  onConfirm: (date: string, time: MealTime) => void;
+}) {
+  const [date, setDate] = useState(todayISO());
+  const [time, setTime] = useState<MealTime>(defaultMealTime());
+  return (
+    <div className="modal-bg" onClick={onCancel}>
+      <div className="modal ask slot" onClick={(e) => e.stopPropagation()}>
+        <span className="modal-mark">🍽</span>
+        <h2>언제 먹은 식단인가요?</h2>
+        <p>
+          날짜와 끼니를 고르면
+          <br />
+          식단 관리의 해당 섹션에 기록돼요.
+        </p>
+        <label className="slot-date">
+          <span>날짜</span>
+          <input
+            type="date"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+          />
+        </label>
+        <div className="slot-times">
+          {MEAL_TIMES.map((t) => (
+            <button
+              key={t}
+              type="button"
+              className={`slot-chip${t === time ? " on" : ""}`}
+              aria-pressed={t === time}
+              onClick={() => setTime(t)}
+            >
+              {t}
+            </button>
+          ))}
+        </div>
+        <div className="ask-actions">
+          <button className="ask-no" onClick={onCancel}>
+            취소
+          </button>
+          <button className="ask-yes" onClick={() => onConfirm(date, time)}>
+            기록하기
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
 function FinalMeal() {
   const nav = useNavigate();
   const { plan, apiResult } = useApp();
@@ -2775,12 +2853,29 @@ function FinalMeal() {
   const [savingKey, setSavingKey] = useState<string | null>(null);
   const [openRecipe, setOpenRecipe] = useState(""); // 인라인으로 펼친 레시피
   const [askJoin, setAskJoin] = useState(false); // 비회원 체험 종료 시 회원가입 안내
+  const [askSlot, setAskSlot] = useState<{ key: string; msg: string } | null>(
+    null,
+  ); // 날짜·끼니 선택 팝업
+  // 식단 기록은 날짜·끼니를 먼저 고르게 하고, 그 외(PDF 등)는 바로 저장한다.
   const save = async (key: string, msg: string) => {
     if (!requireUser(nav)) return;
+    if (key === "fook:favorites") return setAskSlot({ key, msg });
     setSavingKey(key);
     try {
       await saveEverywhere(key, item);
       alert(msg);
+    } finally {
+      setSavingKey(null);
+    }
+  };
+  const saveWithSlot = async (date: string, time: MealTime) => {
+    if (!askSlot) return;
+    const { key, msg } = askSlot;
+    setAskSlot(null);
+    setSavingKey(key);
+    try {
+      await saveEverywhere(key, { ...item, mealDate: date, mealTime: time });
+      alert(`${date} ${time} 식단으로 ${msg}`);
     } finally {
       setSavingKey(null);
     }
@@ -2817,10 +2912,10 @@ function FinalMeal() {
       <div className="final-tabs">
         <button
           disabled={savingKey === "fook:favorites"}
-          onClick={() => save("fook:favorites", "저장된 식단에 추가했어요.")}
+          onClick={() => save("fook:favorites", "기록된 식단에 추가했어요.")}
         >
           <BookmarkIcon />
-          <span>{savingKey === "fook:favorites" ? "저장 중..." : "저장하기"}</span>
+          <span>{savingKey === "fook:favorites" ? "기록 중..." : "기록하기"}</span>
         </button>
         <button onClick={() => nav("/home")}>
           <HomeIcon />
@@ -2835,6 +2930,12 @@ function FinalMeal() {
       {/* 새 화면으로 넘어가지 않고 고른 음식의 레시피를 이 자리에서 펼친다 */}
       <RecipeList selected={openRecipe} onSelect={setOpenRecipe} />
       {/* 비회원 체험을 마쳤을 때만 뜨는 회원가입 안내 */}
+      {askSlot && (
+        <MealSlotDialog
+          onCancel={() => setAskSlot(null)}
+          onConfirm={saveWithSlot}
+        />
+      )}
       {askJoin && (
         <div className="modal-bg" onClick={() => setAskJoin(false)}>
           <div className="modal ask" onClick={(e) => e.stopPropagation()}>
@@ -2847,7 +2948,7 @@ function FinalMeal() {
             <p>
               키 체중, 투석 유형을 등록하면
               <br />
-              내 기준에 맞춘 영양 계산과 식단 저장 등을 쓸 수 있어요
+              내 기준에 맞춘 영양 계산과 식단 관리 등을 쓸 수 있어요
             </p>
             <div className="ask-actions">
               <button className="ask-no" onClick={() => nav("/login")}>
@@ -3153,16 +3254,23 @@ function Recipe() {
   const { plan } = useApp();
   const decoded = decodeURIComponent(name);
   const [selected, setSelected] = useState(decoded);
-  const saveMeal = async () => {
+  const [askSlot, setAskSlot] = useState(false); // 날짜·끼니 선택 팝업
+  const saveMeal = () => {
     if (!requireUser(nav)) return;
+    setAskSlot(true);
+  };
+  const saveWithSlot = async (date: string, time: MealTime) => {
+    setAskSlot(false);
     await saveEverywhere("fook:favorites", {
       id: `meal-${Date.now()}`,
       title: plan.menus[1] || decoded,
       subtitle: plan.menus.join(" · "),
       createdAt: new Date().toISOString(),
       menus: plan.menus,
+      mealDate: date,
+      mealTime: time,
     });
-    alert("저장된 식단에 추가했어요.");
+    alert(`${date} ${time} 식단으로 기록했어요.`);
   };
   return (
     <Shell
@@ -3173,7 +3281,7 @@ function Recipe() {
             <HomeIcon /> 홈으로
           </button>
           <button onClick={saveMeal}>
-            <BookmarkIcon /> 저장하기
+            <BookmarkIcon /> 기록하기
           </button>
           <button onClick={() => nav("/pdf")}>
             <DocIcon /> PDF 다운로드
@@ -3194,6 +3302,12 @@ function Recipe() {
         </>
       )}
       <RecipeList selected={selected} onSelect={setSelected} />
+      {askSlot && (
+        <MealSlotDialog
+          onCancel={() => setAskSlot(false)}
+          onConfirm={saveWithSlot}
+        />
+      )}
     </Shell>
   );
 }
@@ -3513,10 +3627,10 @@ function BottomNav({
   active: "home" | "history" | "favorites" | "account";
 }) {
   const nav = useNavigate();
-  // 목업 하단 탭: 홈 / 저장된 식단 / 프로필 3개
+  // 목업 하단 탭: 홈 / 식단 관리 / 프로필 3개
   const items = [
     ["home", <HomeIcon key="h" />, "홈", "/home"],
-    ["favorites", <ClipboardIcon key="c" />, "저장된 식단", "/favorites"],
+    ["favorites", <ClipboardIcon key="c" />, "식단 관리", "/favorites"],
     ["account", <UserIcon key="u" />, "프로필", "/account"],
   ] as const;
   return (
@@ -3603,7 +3717,7 @@ function Account() {
           <i>›</i>
         </button>
         <button onClick={() => nav("/favorites")}>
-          <span>즐겨찾기</span>
+          <span>식단 관리</span>
           <i>›</i>
         </button>
         <button onClick={() => nav("/documents")}>
@@ -3619,6 +3733,36 @@ function Account() {
         로그아웃
       </button>
     </Shell>
+  );
+}
+// 저장 목록의 카드 한 장 (식단 기록 / 식단 관리 / PDF 보관함 공통)
+function SavedCard({
+  item,
+  mode,
+  onOpen,
+  onRemove,
+}: {
+  item: SavedItem;
+  mode: "history" | "favorites" | "documents";
+  onOpen: (x: SavedItem) => void;
+  onRemove: (id: string) => void;
+}) {
+  return (
+    <article>
+      <div className="saved-thumb">{mode === "documents" ? "PDF" : "KOOK"}</div>
+      <button className="saved-main" onClick={() => onOpen(item)}>
+        <b>{item.title}</b>
+        <span>{item.subtitle}</span>
+        <small>
+          {item.mealDate
+            ? new Date(item.mealDate).toLocaleDateString("ko-KR")
+            : new Date(item.createdAt).toLocaleDateString("ko-KR")}
+        </small>
+      </button>
+      <button className="delete-mini" onClick={() => onRemove(item.id)}>
+        ×
+      </button>
+    </article>
   );
 }
 function LibraryPage({
@@ -3646,13 +3790,19 @@ function LibraryPage({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode]);
   const meta = {
-    history: ["식단 기록", "최근 생성하고 저장한 식단"],
-    favorites: ["즐겨찾기", "다시 보고 싶은 맞춤 식단"],
+    history: ["식단 기록", "최근 생성하고 기록한 식단"],
+    favorites: ["식단 관리", "기록한 식단을 모아두고 다시 불러올 수 있어요"],
     documents: ["PDF 보관함", "생성한 레시피 문서 기록"],
   }[mode];
   const remove = async (id: string) => {
     setItems((prev) => prev.filter((x) => x.id !== id));
     await deleteEverywhere(key, id);
+  };
+  const openItem = (x: SavedItem) => {
+    if (x.menus) {
+      storage.set("fook:restore", x);
+      nav("/home");
+    }
   };
   return (
     <Shell
@@ -3669,29 +3819,67 @@ function LibraryPage({
           <span>불러오는 중...</span>
         </div>
       )}
-      {!loading && items.length > 0 && (
+      {!loading && items.length > 0 && mode === "favorites" && (
+        // 식단 관리는 아침 / 점심 / 저녁 섹션으로 한 줄씩 나눠서 보여준다
+        <>
+          {MEAL_TIMES.map((t) => (
+            <section className="meal-slot-section" key={t}>
+              <h2 className="section-title">
+                {t}
+                <span className="slot-count">
+                  {items.filter((x) => x.mealTime === t).length}
+                </span>
+              </h2>
+              {items.some((x) => x.mealTime === t) ? (
+                <div className="saved-list">
+                  {items
+                    .filter((x) => x.mealTime === t)
+                    .map((x) => (
+                      <SavedCard
+                        key={x.id}
+                        item={x}
+                        mode={mode}
+                        onOpen={openItem}
+                        onRemove={remove}
+                      />
+                    ))}
+                </div>
+              ) : (
+                <p className="slot-empty">아직 {t} 기록이 없어요.</p>
+              )}
+            </section>
+          ))}
+          {/* 끼니를 고르기 전에 저장한 예전 기록 */}
+          {items.some((x) => !x.mealTime) && (
+            <section className="meal-slot-section">
+              <h2 className="section-title">끼니 미지정</h2>
+              <div className="saved-list">
+                {items
+                  .filter((x) => !x.mealTime)
+                  .map((x) => (
+                    <SavedCard
+                      key={x.id}
+                      item={x}
+                      mode={mode}
+                      onOpen={openItem}
+                      onRemove={remove}
+                    />
+                  ))}
+              </div>
+            </section>
+          )}
+        </>
+      )}
+      {!loading && items.length > 0 && mode !== "favorites" && (
         <div className="saved-list">
           {items.map((x) => (
-            <article key={x.id}>
-              <div className="saved-thumb">
-                {mode === "documents" ? "PDF" : "KOOK"}
-              </div>
-              <button
-                className="saved-main"
-                onClick={() =>
-                  x.menus && (storage.set("fook:restore", x), nav("/home"))
-                }
-              >
-                <b>{x.title}</b>
-                <span>{x.subtitle}</span>
-                <small>
-                  {new Date(x.createdAt).toLocaleDateString("ko-KR")}
-                </small>
-              </button>
-              <button className="delete-mini" onClick={() => remove(x.id)}>
-                ×
-              </button>
-            </article>
+            <SavedCard
+              key={x.id}
+              item={x}
+              mode={mode}
+              onOpen={openItem}
+              onRemove={remove}
+            />
           ))}
         </div>
       )}
@@ -3700,8 +3888,8 @@ function LibraryPage({
           <div>
             {mode === "favorites" ? "♡" : mode === "documents" ? "PDF" : "◷"}
           </div>
-          <b>아직 저장된 항목이 없어요.</b>
-          <p>맞춤 식단을 생성한 뒤 저장해보세요.</p>
+          <b>아직 기록된 항목이 없어요.</b>
+          <p>맞춤 식단을 생성한 뒤 기록해보세요.</p>
           <Button onClick={() => nav("/home")}>식단 만들러 가기</Button>
         </div>
       )}
