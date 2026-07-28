@@ -857,30 +857,6 @@ const slides = [
   ],
 ] as const;
 // 첫 화면: "오늘 뭐 먹지?" 스플래시. 시작하기를 누르면 온보딩 5단계로 들어간다.
-// 화면 왼쪽 위에 실제 현재 시각을 00:00 형태로 보여준다 (그림 속 가짜 9:41 대체).
-function NowClock({ className = "" }: { className?: string }) {
-  const [now, setNow] = useState(() => new Date());
-  useEffect(() => {
-    // 다음 '분'이 바뀌는 순간에 맞춰 갱신하고, 이후 1분 간격으로 유지한다.
-    let interval: number | undefined;
-    const toNextMinute = 60000 - (Date.now() % 60000);
-    const timeout = window.setTimeout(() => {
-      setNow(new Date());
-      interval = window.setInterval(() => setNow(new Date()), 60000);
-    }, toNextMinute);
-    return () => {
-      clearTimeout(timeout);
-      if (interval) clearInterval(interval);
-    };
-  }, []);
-  const hh = String(now.getHours()).padStart(2, "0");
-  const mm = String(now.getMinutes()).padStart(2, "0");
-  return (
-    <time className={`now-clock ${className}`} dateTime={`${hh}:${mm}`}>
-      {hh}:{mm}
-    </time>
-  );
-}
 function Splash({ onStart }: { onStart: () => void }) {
   // 준비된 홈 이미지가 있으면 그 한 장을 화면 전체로 쓴다.
   // 그림 속 '시작하기' 버튼은 일러스트 위에 겹쳐 그려져 있어 잘라낼 수 없으므로,
@@ -896,8 +872,6 @@ function Splash({ onStart }: { onStart: () => void }) {
               alt="오늘 뭐 먹지? 고민에 푹 빠질 땐 KOOK이 도와드립니다"
               onError={() => setShotFailed(true)}
             />
-            {/* 그림에 박힌 '9:41'을 배경색으로 덮고 실제 현재 시각을 올린다 */}
-            <NowClock className="on-shot" />
             {/* 그림 속 '시작하기' 버튼 위에 겹치는 투명 버튼 */}
             <button
               className="splash-hit"
