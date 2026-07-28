@@ -918,7 +918,7 @@ function Splash({ onStart }: { onStart: () => void }) {
             </div>
           ))}
         </div>
-        <p className="splash-caption">혈액투석 환자 맞춤형 AI 식단 서비스</p>
+        <p className="splash-caption">혈액투석 환자 맞춤형 AI 식단 관리 솔루션</p>
       </div>
     </Shell>
   );
@@ -1218,7 +1218,7 @@ function Login() {
       <div className="login-brand">
         <Logo />
         <p className="login-tagline">
-          혈액투석 환자 맞춤형 <b>AI 식단 서비스</b>
+          혈액투석 환자 맞춤형 <b>AI 식단 관리 솔루션</b>
         </p>
         <div className="login-divider">
           <span />♥<span />
