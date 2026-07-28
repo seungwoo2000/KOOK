@@ -387,7 +387,7 @@
   left: 12.1%; right: 13.1%; top: 90.5%; bottom: 1.4%;
   display: flex; align-items: center; justify-content: center; gap: 0.9em;
   border: 0; border-radius: 999px; cursor: pointer;
-  background: #475536; color: #fff;
+  background: #2F5836; color: #fff;   /* 앱 전체 기본 버튼과 같은 초록 */
   font-family: inherit; font-weight: 800;
   font-size: clamp(17px, 5.2cqi, 23px); letter-spacing: -.02em;
   box-shadow: 0 6px 18px rgba(30, 42, 26, .22);
