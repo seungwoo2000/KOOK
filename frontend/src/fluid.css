@@ -334,6 +334,9 @@
    ========================================================================== */
 .screen.screen-full { padding: 0; overflow: hidden; }
 .onboarding-page { position: relative; width: 100%; height: 100%; }
+/* 이미지는 잘리지 않게 전체를 보여준다(contain).
+   cover로 채우면 3번 이미지 하단의 '투석환자 남자 65세…' 안내 문구가 잘린다.
+   대신 하단 버튼 높이를 줄여 좌우 여백을 최소화했다. */
 .onboarding-page img {
   display: block; width: 100%; height: 100%;
   object-fit: contain; object-position: top center;
@@ -447,3 +450,22 @@ html, body {
   mix-blend-mode: multiply;
 }
 .skip.float.right { left: auto; right: var(--sp-sm); }
+
+/* ============================================================================
+   v25 — 앱 프레임을 온보딩 이미지 비율에 맞춤
+   온보딩 이미지 6장이 941x1819(1.933) 비율이라, 화면 틀도 같은 비율로 만들면
+   이미지가 위아래 여백 없이 정확히 들어찬다.
+   실제 휴대폰은 기기가 화면 크기를 정하므로 이 규칙은 PC·태블릿에만 적용된다.
+   ========================================================================== */
+@media (min-width: 471px) {
+  .phone {
+    aspect-ratio: 941 / 1819;
+    height: min(calc(100dvh - 36px), 920px);
+    width: auto;
+    max-width: none;
+  }
+}
+
+/* 온보딩 단계 화면은 하단 버튼을 낮춰 그림이 최대한 커지게 한다 */
+.screen-full + .footer { padding: 4px var(--sp-lg) calc(6px + env(safe-area-inset-bottom)); }
+.screen-full + .footer .flow-btn { min-height: clamp(40px, 11cqi, 48px); }
