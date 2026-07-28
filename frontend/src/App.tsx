@@ -872,12 +872,11 @@ function Splash({ onStart }: { onStart: () => void }) {
               alt="오늘 뭐 먹지? 고민에 푹 빠질 땐 KOOK이 도와드립니다"
               onError={() => setShotFailed(true)}
             />
-            {/* 그림 속 '시작하기' 버튼 위에 겹치는 투명 버튼 */}
-            <button
-              className="splash-hit"
-              onClick={onStart}
-              aria-label="시작하기"
-            />
+            {/* 그림 속 '시작하기' 버튼을 실제 버튼으로 덮는다.
+                투명하게 두면 눌리는지 알 수 없고, 이미지가 잘리면 아예 안 보인다. */}
+            <button className="splash-hit" onClick={onStart}>
+              시작하기 <i>→</i>
+            </button>
           </div>
         </div>
       </Shell>

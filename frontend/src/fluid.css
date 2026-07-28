@@ -379,15 +379,24 @@
   .splash-frame img { height: auto; }
 }
 
-/* 그림 속 버튼 위 투명 버튼 */
+/* 그림 속 '시작하기' 버튼을 실제 버튼으로 덮어쓴다.
+   색·위치는 이미지에서 실측(#475536 / 12.1%·13.1%·90.5%·1.4%)해 맞췄으므로
+   그림과 이어져 보이면서도, 이미지가 잘리거나 바뀌어도 버튼은 항상 보인다. */
 .splash-hit {
   position: absolute;
   left: 12.1%; right: 13.1%; top: 90.5%; bottom: 1.4%;
-  border: 0; background: transparent; padding: 0;
-  border-radius: 999px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 0.9em;
+  border: 0; border-radius: 999px; cursor: pointer;
+  background: #475536; color: #fff;
+  font-family: inherit; font-weight: 800;
+  font-size: clamp(17px, 5.2cqi, 23px); letter-spacing: -.02em;
+  box-shadow: 0 6px 18px rgba(30, 42, 26, .22);
+  transition: transform .12s ease, filter .12s ease;
 }
-.splash-hit:focus-visible { outline: 3px solid var(--gd); outline-offset: 3px; }
-.splash-hit:active { background: rgba(0, 0, 0, .07); }
+.splash-hit i { font-style: normal; font-size: 1.05em; }
+.splash-hit:hover { filter: brightness(1.08); }
+.splash-hit:active { transform: translateY(1px); filter: brightness(.94); }
+.splash-hit:focus-visible { outline: 3px solid #1E2A20; outline-offset: 3px; }
 
 /* 체험 안내 팝업의 예시 프로필 표 */
 .guest-profile {
