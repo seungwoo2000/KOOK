@@ -9,6 +9,23 @@ expand() 단계 재료 정규화: 잡곡→백미, 육수(멸치·다시마·사
 - 단백질: 범위 벗어나면 단백질찬(메뉴 통째) 비율 스케일. 비앵커 우선.
 - 열량:  초과분만큼 밥계열 덜어냄(하한0.4), 부족분은 밥 증량(최대1.3)+기름 보충. 항상 마지막.
 순서: 김치→나트륨→가공품 → [칼륨→인→단백→나트륨재적용→열량]×2.
+
+[2026-07-27 최종 채택 확정] 두부·콩류 앵커 전용 조건부 경로 반영.
+- 목적: 두부·콩류 주찬은 phosphorus 판정(Peff)과 protein 레버의 증량이 서로를 되풀이해서
+  깨뜨리는 충돌(phosphorus↔protein 핑퐁)이 다른 앵커보다 뚜렷해, 그 앵커에서만 인 판정을
+  raw P로 통일하고 단백질·열량 증량에 raw P 예산 상한(90%)을 걸어 이 충돌을 완화한다.
+- 적용범위: adjust()가 주찬(menus[2]) 또는 지정 앵커의 정체성 재료 group=='두류'일 때만
+  (`_plant_protein_path_needed()`, 메뉴명 하드코딩 없음) lever_phosphorus_rawP/
+  lever_protein_capped/lever_calorie_capped 경로를 타고, 그 외(생선구이·육류 등 비두류
+  앵커·랜덤모드 포함)는 기존 lever_phosphorus/lever_protein/lever_calorie를 완전히 그대로
+  쓴다 — 아키텍처·게이트 순서·기준값 변경 없음, 규칙기반 레버 내부의 조건부 분기 하나만 추가.
+- 검증: service_rollout_verification_FOOK.py로 OLD(수정 전 백업)와 3,600건 paired 비교
+  — 생선구이·육류 각 1,200건 전부 완전동일(무회귀), 두부·콩류만 생성성공률 94→100%·
+  후보0개율 6→0%·비현실재료량 46→20% 개선. 상세: service_rollout_verification_report.md.
+- lever_potassium/lever_sodium/lever_sodium_extra/lever_kimchi/add_oil/add_snack과
+  pass1·pass2 나트륨 재검증은 전부 무변경(두 경로 공통). S1(pre-loop 나트륨 제거)은
+  이번 확정에 포함하지 않음(별도 미채택 사안).
+- 롤백: FOOK_adjust_levers.py.bak_before_rawP_tofu_path_20260727 로 파일 교체.
 """
 import openpyxl, glob, os, csv, json
 from collections import Counter, defaultdict
@@ -846,6 +863,74 @@ def lever_phosphorus(inst, pmax, anchor=None, plo=0):
     return totals(inst)['Peff'] < pmax
 
 
+def lever_phosphorus_rawP(inst, pmax, anchor=None, plo=0):
+    """lever_phosphorus의 raw P 기준 버전(2026-07-27, 두부·콩류 앵커 전용 조건부 경로).
+    로직·대체재풀·임계값은 lever_phosphorus와 완전히 동일 — 판정 기준 4곳만 Peff→원값 P로
+    치환(진입/수렴 조건, 대체후보 비교값, 양감소 랭킹, 루프소진 최종반환). Peff는 여기서
+    전혀 쓰지 않고 totals()의 참고값으로만 남는다.
+    채택 근거: 교차앵커 실험(protein_phosphorus_cross_anchor)에서 이 경로가 두부·콩류
+    앵커에서만 뚜렷한 개선을 보이고 생선구이·육류에서는 효과가 미미해 두부·콩류 전용으로
+    조건부 반영함(adjust()의 _plant_protein_path_needed 분기 참고)."""
+    ing_nut, base_fresh, ing2kw, kw_rep, subs, _ = NUT
+    for _ in range(25):
+        if totals(inst)['P'] < pmax:          # ← raw P (lever_phosphorus는 Peff)
+            return True
+        non = [i for i in inst if i['menu'] != anchor]
+
+        best = None
+        for i in non:
+            if i['P'] is None:
+                continue
+            if i['group'] == '조미료류':
+                continue
+            if any(d in i['ing'] for d in DRIED):
+                continue
+            if is_sole_solid_ingredient(non, i['menu'], exclude=i):
+                continue
+            for sub in SUBS_P.get(ing2kw.get(i['ing']), []):
+                rep = kw_rep.get(sub); nd = ing_nut.get(rep) if rep else None
+                if not nd or nd['P'] is None or not same_category(nd['group'], i['group']):
+                    continue
+                if rep.split(',')[0].strip() == i['ing'].split(',')[0].strip():
+                    continue
+                if is_processed_name(rep, nd['group']) and not is_processed(i):
+                    continue
+                if menu_has_ingredient(non, i['menu'], rep, exclude=i):
+                    continue
+                effP_i = i['P']                 # ← raw P (lever_phosphorus는 p_abs)
+                effP_nd = nd['P']               # ← raw P (lever_phosphorus는 p_abs)
+                if effP_nd < effP_i:
+                    ip, npr = (i['protein'] or 0), (nd['protein'] or 0)
+                    if ip == 0 or npr >= ip * 0.75:
+                        g = i['amt'] / 100 * (effP_i - effP_nd)
+                        if g >= P_SWAP_MIN_GAIN and (best is None or g > best[0]):
+                            best = (g, i, rep, nd)
+                    break
+        if best:
+            _, i, rep, nd = best
+            SWAP_LOG.append((i['menu'], i['ing'], rep, 'P', i['P'], nd['P']))
+            old_ing, old_menu = i['ing'], i['menu']
+            i['ing'] = rep
+            for k in ('E', 'protein', 'P', 'K', 'Na', 'group'):
+                i[k] = nd[k]
+            rename_menu_for_swap(inst, old_menu, old_ing, rep)
+            continue
+
+        cand = [i for i in non if i['P'] and i['amt'] > 1 and reducible(i)]
+        if cand:
+            reduce_amt(max(cand, key=lambda x: x['amt'] / 100 * x['P']), 0.7)   # ← raw P (lever_phosphorus는 p_abs)
+            continue
+
+        anc = [i for i in inst if i['menu'] == anchor and i['amt'] > 1 and reducible(i)]
+        if anc and totals(inst)['protein'] > plo:
+            for i in anc:
+                reduce_amt(i, 0.85)
+            continue
+
+        return False
+    return totals(inst)['P'] < pmax            # ← raw P (lever_phosphorus는 Peff)
+
+
 def lever_protein(inst, lo, hi, anchor=None):
     """단백질찬(메뉴 통째)을 같은 비율로 스케일 → 맛/비율 유지.
     앵커(유저메뉴)는 후순위: 비앵커 메뉴 하나만 조절해서 목표에 닿을 수 있으면 그걸 쓰고,
@@ -875,6 +960,67 @@ def lever_protein(inst, lo, hi, anchor=None):
     new_top = target - (t - cur_top)
     if cur_top > 0 and new_top > 0:
         scale_menu(inst, top, max(0.3, min(new_top / cur_top, 2.0)))
+
+
+PROTEIN_CALORIE_CAP_FRAC = 0.90   # 두부·콩류 앵커 전용 raw P 예산 cap 배율(2026-07-27 확정,
+# protein_phosphorus_final_compare/cross_anchor 실험에서 검증된 값. 0.80/1.00 스윕은 세 앵커
+# 어디서도 필요성이 확인되지 않아 미실시 — frac=0.90 그대로 채택).
+
+
+def _cap_scale_menu_rawP(inst, menu, ratio, pmax):
+    """scale_menu의 raw P 예산판 — 비율>1(증량)일 때만 개입, 남은 raw P 예산의
+    PROTEIN_CALORIE_CAP_FRAC(90%)까지만 늘어나게 배율을 제한한다. 감량(비율<=1)은 원본
+    scale_menu와 완전히 동일(무개입). lever_protein_capped/lever_calorie_capped 전용
+    보조함수(2026-07-27, 두부·콩류 앵커 전용 조건부 경로)."""
+    if ratio <= 1.0 + 1e-9:
+        scale_menu(inst, menu, ratio)
+        return
+    current_raw_P = totals(inst)['P']
+    headroom = pmax - current_raw_P
+    allowed_increase = max(0.0, headroom * PROTEIN_CALORIE_CAP_FRAC)
+    menu_items = [i for i in inst if i['menu'] == menu]
+    P_menu = sum(i['amt'] / 100 * i['P'] for i in menu_items if i['P'] is not None)
+    Amt_menu = sum(i['amt'] for i in menu_items)
+    if Amt_menu <= 0:
+        scale_menu(inst, menu, ratio)
+        return
+    requested_grams = Amt_menu * (ratio - 1.0)
+    density = P_menu / Amt_menu
+    allowed_grams = float('inf') if density <= 1e-9 else allowed_increase / density
+    applied_grams = max(0.0, min(requested_grams, allowed_grams))
+    final_ratio = 1.0 + applied_grams / Amt_menu
+    scale_menu(inst, menu, final_ratio)
+
+
+def lever_protein_capped(inst, lo, hi, anchor=None, pmax=None):
+    """lever_protein의 raw P 예산 cap 버전(2026-07-27, 두부·콩류 앵커 전용 조건부 경로).
+    메뉴 선택 로직은 lever_protein과 완전히 동일 — 증량(scale_menu 비율>1)에만
+    _cap_scale_menu_rawP로 남은 raw P 예산 90% 상한을 적용. 감량은 무변경.
+    채택 근거는 lever_phosphorus_rawP 주석 참고(교차앵커 실험 결과)."""
+    t = totals(inst)['protein']
+    if lo <= t <= hi:
+        return
+    pm = defaultdict(float)
+    for i in inst:
+        if i['protein']:
+            pm[i['menu']] += i['amt'] / 100 * i['protein']
+    if not pm:
+        return
+    target = (lo + hi) / 2
+
+    for m in sorted([x for x in pm if x != anchor], key=pm.get, reverse=True):
+        cur = pm[m]
+        new = target - (t - cur)
+        if cur > 0 and new > 0 and 0.3 <= new / cur <= 2.0:
+            _cap_scale_menu_rawP(inst, m, new / cur, pmax)
+            return
+
+    top = max(pm, key=pm.get)
+    cur_top = pm[top]
+    new_top = target - (t - cur_top)
+    if cur_top > 0 and new_top > 0:
+        ratio = max(0.3, min(new_top / cur_top, 2.0))
+        _cap_scale_menu_rawP(inst, top, ratio, pmax)
 
 
 RICE_FLOOR = 0.4   # 밥계열을 원래 양의 40% 밑으로는 안 줄임 (한 끼가 밥 한술 되는 것 방지)
@@ -1108,6 +1254,89 @@ def lever_calorie(inst, lo, hi, anchor=None, allow_snack=True, kmax=None, pmax=N
                 add_snack(inst, lo - e3, kmax=kmax, pmax=pmax)
 
 
+def lever_calorie_capped(inst, lo, hi, anchor=None, allow_snack=True, kmax=None, pmax=None):
+    """lever_calorie의 raw P 예산 cap 버전(2026-07-27, 두부·콩류 앵커 전용 조건부 경로).
+    감소 분기(e>hi)와 add_oil/add_snack 경로는 lever_calorie와 완전히 동일(무변경) — cap은
+    증량 분기(e<lo, 밥 증량)에만 적용. add_oil이 넣는 참기름/콩기름은 원본 데이터상 P=0이라
+    cap이 자연히 무제한이고(밀도 0), add_snack은 자체적으로 kmax/pmax(=여기 pmax와 동일 값)로
+    raw P 절대예산을 이미 체크하므로 별도 cap이 불필요 — 실험(protein_phosphorus_final_compare/
+    cross_anchor)에서 이 가정을 실측으로 확인함."""
+    e = totals(inst)['E']
+    if e > hi:
+        rice_pool, rice_cur = _pick_pool([i for i in inst if i['menu'] in RICE and i['E']], anchor, e - hi)
+        if rice_cur > 0:
+            new = max(rice_cur - (e - hi), rice_cur * RICE_FLOOR)
+            f = new / rice_cur
+            for i in rice_pool:
+                i['amt'] = max(i['amt'] * f, amt_floor_of(i))
+        e2 = totals(inst)['E']
+        if e2 > hi:
+            oil_pool, oil_cur = _pick_pool([i for i in inst if i['group'] == '유지류' and i['E']], anchor, e2 - hi)
+            if oil_cur > 0:
+                new = max(oil_cur - (e2 - hi), 0)
+                f = new / oil_cur
+                for i in oil_pool:
+                    i['amt'] = max(i['amt'] * f, amt_floor_of(i))
+    elif e < lo and e > 0:
+        rice = [i for i in inst if i['menu'] in RICE and i['E']]
+        non = [i for i in rice if i['menu'] != anchor]
+        pool = non if non else rice
+        cur = sum(i['amt'] / 100 * i['E'] for i in pool)
+        if cur > 0:
+            new = min(cur + (lo - e), cur * 1.3)
+            ratio = new / cur
+            if ratio > 1.0 + 1e-9:
+                current_raw_P = totals(inst)['P']
+                headroom = pmax - current_raw_P
+                allowed_increase = max(0.0, headroom * PROTEIN_CALORIE_CAP_FRAC)
+                P_pool = sum(i['amt'] / 100 * i['P'] for i in pool if i['P'] is not None)
+                Amt_pool = sum(i['amt'] for i in pool)
+                if Amt_pool <= 0:
+                    final_ratio = ratio
+                else:
+                    requested_grams = Amt_pool * (ratio - 1.0)
+                    density = P_pool / Amt_pool
+                    allowed_grams = float('inf') if density <= 1e-9 else allowed_increase / density
+                    applied_grams = max(0.0, min(requested_grams, allowed_grams))
+                    final_ratio = 1.0 + applied_grams / Amt_pool
+            else:
+                final_ratio = ratio
+            for i in pool:
+                i['amt'] *= final_ratio
+        e2 = totals(inst)['E']
+        if e2 < lo:
+            add_oil(inst, lo - e2)
+            e3 = totals(inst)['E']
+            if e3 < lo and allow_snack:
+                add_snack(inst, lo - e3, kmax=kmax, pmax=pmax)
+
+
+def _plant_protein_path_needed(inst, menus, anchor):
+    """주찬(menus[2]) 또는 지정앵커가 두부·콩류 식품군인지 판정(2026-07-27).
+    메뉴명 하드코딩 없이 재료 group='두류' 분류만 사용 — 앵커/주찬 메뉴의 정체성 재료
+    (이름에 재료명이 들어간 것, 없으면 최대량 고형재료)가 '두류'군이면 True.
+    True면 adjust()가 lever_phosphorus_rawP/lever_protein_capped/lever_calorie_capped
+    (raw P 통일 + 증량 90% cap) 경로를 쓰고, False면 기존 레버 그대로 쓴다.
+    채택 근거: protein_phosphorus_cross_anchor 교차앵커 검증에서 이 경로가 두부·콩류
+    앵커에서만 뚜렷한 서비스지표 개선을 보였고 생선구이·육류에서는 효과가 미미해
+    두부·콩류 전용으로 조건부 반영함(2026-07-27 확정)."""
+    candidates = []
+    if menus and len(menus) > 2 and menus[2] not in candidates:
+        candidates.append(menus[2])
+    if anchor and anchor not in candidates:
+        candidates.append(anchor)
+    for menu_name in candidates:
+        items = [i for i in inst if i['menu'] == menu_name]
+        if not items:
+            continue
+        identity_items = [i for i in items if is_identity_ingredient(i)]
+        check_items = identity_items if identity_items else items
+        main_item = max(check_items, key=lambda x: x['amt'])
+        if main_item.get('group') == '두류':
+            return True
+    return False
+
+
 def adjust(menus, b, anchor=None):
     """b = dict(Elo,Ehi,Plo,Phi,Kmax,Pmax,Namax,Na_total_target). 한 끼 단위.
     anchor = 유저 지정메뉴(재료 보존). 반환: before, after, inst, p_ok(인 충족 성공여부)."""
@@ -1119,6 +1348,11 @@ def adjust(menus, b, anchor=None):
     lever_sodium(inst)              # 조미료 → 첨가염 소금1g(393)까지 적응적 축소
     lever_sodium_extra(inst, na_target)  # 고나트륨 메뉴 통째 축소 → 총나트륨 남은예산으로. 판정은 조미료만.
     p_ok = True
+    # 두부·콩류 앵커(주찬 또는 지정메뉴) 전용 raw P 통일 경로(2026-07-27 조건부 반영).
+    # 교차앵커 실험 결과 이 경로는 두부·콩류에서만 뚜렷이 개선하고 생선구이·육류에는 효과가
+    # 미미해, 그 두 앵커는 완전히 기존 경로(변경 없음)를 그대로 탄다 — _plant_protein_path_needed
+    # 주석 및 protein_phosphorus_cross_anchor_report.md 참고.
+    use_rawP_path = _plant_protein_path_needed(inst, menus, anchor)
     # 레버 2회 반복(칼륨교체가 인을↑, 단백질스케일이 칼륨/인을↑ 되흔들어 1패스로 수렴 안 함).
     # 루프를 더 늘려보니: 끼단위 통과는 오르나 하루누적(남은예산 방식)은 오히려 내려감(72.9→70.7).
     # 진동도 무해 확인(루프 중 최선 ≈ 수렴값). 주지표=하루5영양이므로 2회가 최적.
@@ -1127,8 +1361,14 @@ def adjust(menus, b, anchor=None):
         # (금지가 아니라 후순위 -> 영양 통과 능력은 그대로, 앵커는 가능할 때만 보존)
         # 예외: lever_kimchi는 의도적으로 앵커 무시(저염김치 강제가 임상 우선).
         lever_potassium(inst, b['Kmax'], anchor=anchor)
-        p_ok = lever_phosphorus(inst, b['Pmax'], anchor=anchor, plo=b['Plo'])
-        lever_protein(inst, b['Plo'], b['Phi'], anchor=anchor)
+        if use_rawP_path:
+            p_ok = lever_phosphorus_rawP(inst, b['Pmax'], anchor=anchor, plo=b['Plo'])
+        else:
+            p_ok = lever_phosphorus(inst, b['Pmax'], anchor=anchor, plo=b['Plo'])
+        if use_rawP_path:
+            lever_protein_capped(inst, b['Plo'], b['Phi'], anchor=anchor, pmax=b['Pmax'])
+        else:
+            lever_protein(inst, b['Plo'], b['Phi'], anchor=anchor)
         # 조미료 재적용(단백질 레버가 간장 든 메뉴를 스케일해 되살린 것 정리)은 반드시 열량 레버 "앞".
         # 조미료엔 열량이 있어서(설탕·고추장·마요네즈), 열량을 lo에 딱 맞춘 뒤 조미료를 깎으면
         # 그대로 미달로 떨어짐. 열량이 항상 마지막이어야 함.
@@ -1138,8 +1378,12 @@ def adjust(menus, b, anchor=None):
         lever_sodium_extra(inst, na_target)
         # 간식(과일 등 K/P 있는 메뉴)은 마지막 패스에서만 허용 — 중간 패스에서 넣으면 다음 패스의
         # 칼륨/인 레버가 그 K/P를 보고 되먹임(다른 메뉴 깎기)을 일으킴(2026-07-23 확인).
-        lever_calorie(inst, b['Elo'], b['Ehi'], anchor=anchor, allow_snack=(pass_i == 1),
-                      kmax=b['Kmax'], pmax=b['Pmax'])
+        if use_rawP_path:
+            lever_calorie_capped(inst, b['Elo'], b['Ehi'], anchor=anchor, allow_snack=(pass_i == 1),
+                                  kmax=b['Kmax'], pmax=b['Pmax'])
+        else:
+            lever_calorie(inst, b['Elo'], b['Ehi'], anchor=anchor, allow_snack=(pass_i == 1),
+                          kmax=b['Kmax'], pmax=b['Pmax'])
     return before, totals(inst), inst, p_ok
 
 

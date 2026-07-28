@@ -231,7 +231,7 @@ async function deleteEverywhere(key: string, id: string) {
 }
 const labels = ["밥", "국", "어육류", "밑반찬", "김치류"];
 // 목업 기준 표기.
-//  · 식단 구성 화면(2/5): 밥 / 국 / 반찬1 / 반찬2 / 반찬3
+//  · 식단 생성 화면(2/5): 밥 / 국 / 반찬1 / 반찬2 / 반찬3
 //  · 레시피 화면: 밥 / 국 / 찬 1 (어육류) / 찬 2 (밑반찬) / 찬 3 (김치류)
 function roleShort(i: number) {
   if (i === 0) return "밥";
@@ -677,7 +677,6 @@ function App() {
         <Route path="/history" element={<LibraryPage mode="history" />} />
         <Route path="/favorites" element={<LibraryPage mode="favorites" />} />
         <Route path="/documents" element={<LibraryPage mode="documents" />} />
-        <Route path="/cart" element={<Cart />} />
         <Route path="/generating" element={<Generating />} />
         <Route path="/meal" element={<MealResult />} />
         <Route path="/analysis" element={<Analysis />} />
@@ -818,7 +817,7 @@ function Button({
 function Trust() {
   return (
     <div className="trust">
-      대한신장학회의 투석환자 영양관리 자료를 참고하여 설계했어요.
+      대한신장학회의 혈액투석 환자 영양관리 자료를 참고하여 설계했어요.
     </div>
   );
 }
@@ -833,20 +832,20 @@ const slides = [
   ],
   [
     "2.",
-    "한 끼 식단 구성",
-    "선택한 음식과 어울리는 식단을 구성해드려요",
+    "한 끼 식단 생성",
+    "선택한 음식과 어울리는 식단을 생성해드려요",
     "meal",
   ],
   [
     "3.",
-    "영양 적합성 분석",
-    "투석환자 개인 프로필 기준으로\n영양 적합성을 분석합니다.",
+    "영양 적합성 판정",
+    "혈액투석 환자 개인 프로필 기준으로\n영양 적합성을 판정합니다.",
     "nutrition",
   ],
   [
     "4.",
-    "분석에 따른 레시피 재조정",
-    "초과되는 영양소에 대하여\n재료의 양을 조절하거나 대체하여\n투석환자 맞춤형으로 레시피를 재조정해줍니다",
+    "판정에 따른 레시피 재구성",
+    "초과되는 영양소에 대하여\n재료의 양을 조절하거나 대체하여\n혈액투석 환자 맞춤형으로 레시피를 재구성해줍니다",
     "adjust",
   ],
   [
@@ -856,31 +855,7 @@ const slides = [
     "final",
   ],
 ] as const;
-// 첫 화면: "오늘 뭐 먹지?" 스플래시. 시작하기를 누르면 온보딩 5단계로 들어간다.
-// 화면 왼쪽 위에 실제 현재 시각을 00:00 형태로 보여준다 (그림 속 가짜 9:41 대체).
-function NowClock({ className = "" }: { className?: string }) {
-  const [now, setNow] = useState(() => new Date());
-  useEffect(() => {
-    // 다음 '분'이 바뀌는 순간에 맞춰 갱신하고, 이후 1분 간격으로 유지한다.
-    let interval: number | undefined;
-    const toNextMinute = 60000 - (Date.now() % 60000);
-    const timeout = window.setTimeout(() => {
-      setNow(new Date());
-      interval = window.setInterval(() => setNow(new Date()), 60000);
-    }, toNextMinute);
-    return () => {
-      clearTimeout(timeout);
-      if (interval) clearInterval(interval);
-    };
-  }, []);
-  const hh = String(now.getHours()).padStart(2, "0");
-  const mm = String(now.getMinutes()).padStart(2, "0");
-  return (
-    <time className={`now-clock ${className}`} dateTime={`${hh}:${mm}`}>
-      {hh}:{mm}
-    </time>
-  );
-}
+// 첫 화면: "오늘 뭐 해 먹지?" 스플래시. 시작하기를 누르면 온보딩 5단계로 들어간다.
 function Splash({ onStart }: { onStart: () => void }) {
   // 준비된 홈 이미지가 있으면 그 한 장을 화면 전체로 쓴다.
   // 그림 속 '시작하기' 버튼은 일러스트 위에 겹쳐 그려져 있어 잘라낼 수 없으므로,
@@ -893,11 +868,9 @@ function Splash({ onStart }: { onStart: () => void }) {
           <div className="splash-frame">
             <img
               src="/assets/onboarding-home.png"
-              alt="오늘 뭐 먹지? 고민에 푹 빠질 땐 KOOK이 도와드립니다"
+              alt="오늘 뭐 해 먹지? 고민에 푹 빠질 땐 KOOK이 도와드립니다"
               onError={() => setShotFailed(true)}
             />
-            {/* 그림에 박힌 '9:41'을 배경색으로 덮고 실제 현재 시각을 올린다 */}
-            <NowClock className="on-shot" />
             {/* 그림 속 '시작하기' 버튼 위에 겹치는 투명 버튼 */}
             <button
               className="splash-hit"
@@ -937,7 +910,7 @@ function Splash({ onStart }: { onStart: () => void }) {
             </div>
           ))}
         </div>
-        <p className="splash-caption">투석환자 맞춤형 AI 식단 서비스</p>
+        <p className="splash-caption">혈액투석 환자 맞춤형 AI 식단 서비스</p>
       </div>
     </Shell>
   );
@@ -1084,7 +1057,7 @@ function OnboardingVisual({ type }: { type: string }) {
   if (type === "nutrition")
     return (
       <div className="visual-card preview-card">
-        <NutrientIconRow caption="KOOK AI가 영양 기준 적합 여부를 분석합니다." />
+        <NutrientIconRow caption="KOOK AI가 영양 기준 적합 여부를 판정합니다." />
         <Nutrients
           values={{
             energy: 620,
@@ -1102,7 +1075,7 @@ function OnboardingVisual({ type }: { type: string }) {
           }}
         />
         <p className="gauge-note">
-          ⓘ 투석환자 남자 65세 키 170cm, 몸무게 60kg 기준
+          ⓘ 혈액투석 환자 남자 65세 키 170cm, 몸무게 60kg 기준
         </p>
       </div>
     );
@@ -1113,7 +1086,7 @@ function OnboardingVisual({ type }: { type: string }) {
           <span className="adjust-ring">
             <ClipboardIcon />
           </span>
-          <b>레시피 재조정 중입니다</b>
+          <b>레시피 재구성 중입니다</b>
           <small>
             KOOK AI가 영양 밸런스를 맞추고 있어요...
             <br />
@@ -1121,7 +1094,7 @@ function OnboardingVisual({ type }: { type: string }) {
           </small>
         </div>
         <p className="preview-label with-icon">
-          <ClipboardIcon /> 레시피 재조정 내용
+          <ClipboardIcon /> 레시피 재구성 내용
         </p>
         <div className="lever-list">
           {[
@@ -1166,7 +1139,7 @@ function OnboardingVisual({ type }: { type: string }) {
     </div>
   );
 }
-// 영양소 5종 아이콘 요약 줄 (목업 3/5 · 영양 적합성 분석 화면 공통)
+// 영양소 5종 아이콘 요약 줄 (목업 3/5 · 영양 적합성 판정 화면 공통)
 function NutrientIconRow({ caption }: { caption?: string }) {
   return (
     <div className="nutrient-icon-row">
@@ -1233,7 +1206,7 @@ function Login() {
       <div className="login-brand">
         <Logo />
         <p className="login-tagline">
-          투석환자 맞춤형 <b>AI 식단 서비스</b>
+          혈액투석 환자 맞춤형 <b>AI 식단 서비스</b>
         </p>
         <div className="login-divider">
           <span />♥<span />
@@ -1284,7 +1257,7 @@ function Login() {
           <small>
             예시 프로필을 기반으로
             <br />
-            AI 식단 추천과 레시피 재조정 과정을
+            AI 식단 추천과 레시피 재구성 과정을
             <br />
             직접 체험해보세요.
           </small>
@@ -2168,7 +2141,7 @@ function Generating() {
         setS((v) =>
           v < 2 ? v + 1 : v < 3 ? v + (Math.random() < 0.3 ? 1 : 0) : v,
         ),
-      1100,
+      1400,
     );
     const run = async () => {
       const api = API;
@@ -2229,7 +2202,7 @@ function Generating() {
     <Shell>
       <div className="loading-page">
         <p className="eyebrow">AI 식단 생성</p>
-        <h1>한 끼를 구성하고 있어요.</h1>
+        <h1>한 끼를 생성하고 있어요.</h1>
         <div className="loader-plate">
           <span className="loader-emoji">🍲</span>
           <div className="orbit" />
@@ -2277,7 +2250,7 @@ function MealResult() {
           <i className="btn-icon">
             <ChartIcon />
           </i>{" "}
-          영양 적합성 분석하기
+          영양 적합성 판정하기
         </button>
       }
     >
@@ -2289,7 +2262,7 @@ function MealResult() {
         <h1>
           선택한 음식과
           <br />
-          어울리는 <b>식단을 구성했어요</b>
+          어울리는 <b>식단을 생성했어요</b>
         </h1>
         <span className="compose-pill">
           구성 : <b>밥, 국, 밥찬 3가지</b>
@@ -2362,7 +2335,7 @@ function Nutrients({
 function Analysis() {
   const nav = useNavigate();
   const { plan, apiResult } = useApp();
-  // 이 화면은 '식단을 구성한 그대로'의 영양을 보여준다. 재조정은 다음 단계에서 하므로
+  // 이 화면은 '식단을 생성한 그대로'의 영양을 보여준다. 재구성은 다음 단계에서 하므로
   // 조정 후 수치(apiResult.nutrition)가 아니라 조정 전 수치(nutrition_before)를 쓴다.
   const raw =
     apiResult?.nutrition_before || apiResult?.nutrition || totalNutrition(plan);
@@ -2376,8 +2349,8 @@ function Analysis() {
     return v > hi || (lo > 0 && v < lo);
   });
   const changeCount = apiResult?.changes?.length || 0;
-  // 이제 이 화면은 '조정 전' 수치를 보여주므로, 초과 항목이 있으면 그대로 '재조정하러 가기'다.
-  //  needFix : 기준을 벗어난 항목이 있다 → 재조정 단계로
+  // 이제 이 화면은 '조정 전' 수치를 보여주므로, 초과 항목이 있으면 그대로 '재구성하러 가기'다.
+  //  needFix : 기준을 벗어난 항목이 있다 → 재구성 단계로
   //  clean   : 처음부터 전부 기준 안 → 볼 조정 내역이 없으면 최종 식단으로 바로
   const state: "needFix" | "clean" = over.length > 0 ? "needFix" : "clean";
   const goNext = () =>
@@ -2391,21 +2364,21 @@ function Analysis() {
             {state === "needFix" ? <RefreshIcon /> : <DocIcon />}
           </i>{" "}
           {state === "needFix"
-            ? "레시피 재조정하러 가기"
+            ? "레시피 재구성하러 가기"
             : changeCount > 0
-              ? `재조정 내역 보기 (${changeCount}건)`
+              ? `재구성 내역 보기 (${changeCount}건)`
               : "최종 식단 보기"}
         </button>
       }
     >
       <BackHeader onBack={() => nav("/meal")} dot />
       <h1 className="analysis-title">
-        영양 적합성 <b>분석 결과</b>
+        영양 적합성 <b>판정 결과</b>
       </h1>
       <p className="sub">
         개인 프로필을 기반으로
         <br />
-        영양 섭취 적합 여부를 분석했습니다.
+        영양 섭취 적합 여부를 판정했습니다.
       </p>
       <NutrientIconRow />
       <Nutrients values={raw} targets={targets} />
@@ -2415,13 +2388,13 @@ function Analysis() {
         <div>
           <b>
             {state === "needFix"
-              ? over.map((x) => x.label).join(" · ") + " — 레시피 재조정 필요"
-              : "레시피 재조정 필요 없음"}
+              ? over.map((x) => x.label).join(" · ") + " — 레시피 재구성 필요"
+              : "레시피 재구성 필요 없음"}
           </b>
           <span>
             {state === "needFix"
-              ? "지금은 식단을 구성한 그대로의 영양이에요. 다음 단계에서 메뉴의 양과 식재료를 조정해 기준에 맞춰드릴게요."
-              : "구성한 그대로 모든 항목이 기준 안에 있어요."}
+              ? "지금은 식단을 생성한 그대로의 영양이에요. 다음 단계에서 메뉴의 양과 식재료를 조정해 기준에 맞춰드릴게요."
+              : "생성한 그대로 모든 항목이 기준 안에 있어요."}
           </span>
         </div>
       </div>
@@ -2451,9 +2424,9 @@ function Adjusting() {
   if (swapCount) badges.push(["저염 메뉴 교체", swapCount]);
   const [p, setP] = useState(0);
   useEffect(() => {
-    // 0.7초 간격으로 단계가 올라간다. p>=1 음식명 교체, p>=2부터 뱃지가 하나씩.
-    const t = setInterval(() => setP((x) => Math.min(x + 1, 4)), 700);
-    const e = setTimeout(() => nav("/comparison"), 4200);
+    // 0.9초 간격으로 단계가 올라간다. p>=1 음식명 교체, p>=2부터 뱃지가 하나씩.
+    const t = setInterval(() => setP((x) => Math.min(x + 1, 4)), 900);
+    const e = setTimeout(() => nav("/comparison"), 5400);
     return () => {
       clearInterval(t);
       clearTimeout(e);
@@ -2467,14 +2440,14 @@ function Adjusting() {
     >
       <StepHeader step={4} total={5} />
       <h1 className="onboarding-title">
-        <b>4.</b> 분석에 따른 레시피 재조정
+        <b>4.</b> 판정에 따른 레시피 재구성
       </h1>
       <p className="sub center">
         초과되는 영양소에 대하여
         <br />
         재료의 <b>양을 조절</b>하거나 <b>대체</b>하여
         <br />
-        투석환자 맞춤형으로 레시피를 재조정해줍니다
+        혈액투석 환자 맞춤형으로 레시피를 재구성해줍니다
       </p>
 
       {/* ① 음식명이 바뀌는 장면이 먼저 나온다 */}
@@ -2521,7 +2494,7 @@ function Adjusting() {
         <span className={p >= 1 ? "adjust-ring spin" : "adjust-ring"}>
           <ClipboardIcon />
         </span>
-        <b>레시피 재조정 중입니다</b>
+        <b>레시피 재구성 중입니다</b>
         <small>
           KOOK AI가 영양 밸런스를 맞추고 있어요...
           <br />
@@ -2542,7 +2515,7 @@ function Comparison() {
   const parsed = changes.map(parseChange);
   const hasReal = changes.length > 0;
   const speech = hasReal
-    ? `분석에 따라 레시피를 재구성했습니다. ${parsed
+    ? `판정에 따라 레시피를 재구성했습니다. ${parsed
         .slice(0, 5)
         .map((c) =>
           c.kind === "removed"
@@ -2615,15 +2588,15 @@ function Comparison() {
           <CheckIcon />
         </span>
         <h1>
-          레시피 <b>재조정 완료</b>
+          레시피 <b>재구성 완료</b>
         </h1>
         <p className="sub center">
           개인 프로필 영양 섭취 기준에 맞게
           <br />
-          식단을 재조정했어요.
+          식단을 재구성했어요.
         </p>
       </div>
-      <h2 className="section-title">음식별 재조정 내용</h2>
+      <h2 className="section-title">음식별 재구성 내용</h2>
       <div className="permenu-list">
         {perMenu.map((m, i) => (
           <article
@@ -2734,32 +2707,35 @@ function Comparison() {
             const aStatus = statusOf(a, lo, hi);
             const diff = a - b;
             const same = Math.round(Math.abs(diff)) === 0;
+            const dir = same ? "same" : diff < 0 ? "down" : "up";
             return (
               <div className="ba-item" key={n.key}>
                 <span className="ba-item-name">
                   {n.icon} {n.label}
                 </span>
+                {/* 증감 뱃지는 화살표 안에 쌓지 않고 아래 행으로 뺀다.
+                    그래야 전/후 숫자가 화살표와 같은 줄에 정렬된다. */}
                 <div className="ba-flow">
                   <span className="ba-from">
                     {fmt(b)}
                     <small>{n.unit}</small>
                   </span>
-                  <span className={`ba-arrow ${same ? "same" : diff < 0 ? "down" : "up"}`}>
+                  <span className={`ba-arrow ${dir}`}>
                     <svg viewBox="0 0 40 16" aria-hidden="true">
                       <path d="M2 8h30" />
                       <path d="M27 3l6 5-6 5" />
                     </svg>
-                    {!same && (
-                      <em>
-                        {diff < 0 ? "−" : "+"}
-                        {fmt(Math.abs(diff))}
-                      </em>
-                    )}
                   </span>
                   <span className={`ba-to ${STATUS_CLASS[aStatus]}`}>
                     {fmt(a)}
                     <small>{n.unit}</small>
                   </span>
+                  {!same && (
+                    <em className={`ba-delta ${dir}`}>
+                      {diff < 0 ? "−" : "+"}
+                      {fmt(Math.abs(diff))}
+                    </em>
+                  )}
                 </div>
               </div>
             );
@@ -3522,7 +3498,7 @@ function PdfPreview() {
 function BottomNav({
   active,
 }: {
-  active: "home" | "history" | "favorites" | "cart" | "account";
+  active: "home" | "history" | "favorites" | "account";
 }) {
   const nav = useNavigate();
   // 목업 하단 탭: 홈 / 저장된 식단 / 프로필 3개
@@ -3720,84 +3696,4 @@ function LibraryPage({
     </Shell>
   );
 }
-function Cart() {
-  const nav = useNavigate();
-  if (!currentUser()) return <Navigate to="/login" replace />;
-  type CartItem = {
-    id: string;
-    name: string;
-    checked: boolean;
-    amount?: number;
-    unit?: string;
-  };
-  const [items, setItems] = useState<CartItem[]>(storage.get("fook:cart", []));
-  const update = (next: CartItem[]) => {
-    setItems(next);
-    storage.set("fook:cart", next);
-  };
-  return (
-    <Shell header={false} footer={<BottomNav active="cart" />}>
-      <BackHeader title="장바구니" />
-      <p className="eyebrow">재료 준비</p>
-      <h1>
-        이번 식단에 필요한
-        <br />
-        재료를 확인하세요.
-      </h1>
-      {items.length ? (
-        <>
-          <div className="cart-list">
-            {items.map((x) => (
-              <label key={x.id}>
-                <input
-                  type="checkbox"
-                  checked={x.checked}
-                  onChange={() =>
-                    update(
-                      items.map((i) =>
-                        i.id === x.id ? { ...i, checked: !i.checked } : i,
-                      ),
-                    )
-                  }
-                />
-                <span>
-                  {x.name}
-                  {x.amount != null && (
-                    <small className="cart-amount">
-                      {" "}
-                      · {fmt2(x.amount)}
-                      {x.unit || "g"}
-                    </small>
-                  )}
-                </span>
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    update(items.filter((i) => i.id !== x.id));
-                  }}
-                >
-                  삭제
-                </button>
-              </label>
-            ))}
-          </div>
-          <div className="cart-summary">
-            <span>준비 완료</span>
-            <b>
-              {items.filter((x) => x.checked).length} / {items.length}
-            </b>
-          </div>
-        </>
-      ) : (
-        <div className="empty-state">
-          <div>▣</div>
-          <b>장바구니가 비어 있어요.</b>
-          <p>완성 식단에서 재료를 한 번에 담을 수 있어요.</p>
-          <Button onClick={() => nav("/home")}>식단 만들기</Button>
-        </div>
-      )}
-    </Shell>
-  );
-}
-
 export default App;

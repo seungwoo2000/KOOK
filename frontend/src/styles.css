@@ -63,7 +63,6 @@ body{font-family:Pretendard,'Noto Sans KR',-apple-system,BlinkMacSystemFont,'Seg
 .bottom-nav{position:sticky;bottom:-34px;margin:30px -24px -34px;padding:8px 10px calc(10px + env(safe-area-inset-bottom));display:grid;grid-template-columns:repeat(5,1fr);background:rgba(255,255,255,.96);backdrop-filter:blur(18px);border-top:1px solid var(--line);z-index:8}.bottom-nav button{border:0;background:transparent;display:grid;place-items:center;gap:3px;color:#849088;min-height:48px}.bottom-nav i{font-size:20px;font-style:normal}.bottom-nav span{font-size:10px;font-weight:800}.bottom-nav button.active{color:var(--gd)}
 .profile-summary{display:grid;grid-template-columns:56px 1fr auto;gap:12px;align-items:center;padding:22px 0}.avatar{width:56px;height:56px;border-radius:20px;background:linear-gradient(135deg,var(--gd),var(--g));color:#fff;display:grid;place-items:center;font-size:22px;font-weight:900}.profile-summary h2,.profile-summary p{margin:0}.profile-summary p{font-size:12px;color:var(--muted);margin-top:4px}.profile-summary button{border:1px solid var(--line);background:#fff;border-radius:12px;padding:8px 12px;font-weight:800}.metric-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}.metric-grid div{background:var(--gs);padding:16px;border-radius:17px;display:grid;gap:4px}.metric-grid b{font-size:17px}.metric-grid span{font-size:11px;color:var(--muted)}.menu-list{border:1px solid var(--line);border-radius:18px;overflow:hidden;background:#fff}.menu-list button{width:100%;display:flex;justify-content:space-between;border:0;border-bottom:1px solid var(--line);background:#fff;padding:16px;font-size:14px;font-weight:750}.menu-list button:last-child{border-bottom:0}.menu-list i{font-style:normal;color:var(--muted)}.logout{width:100%;border:0;background:transparent;color:#9b554e;padding:18px;font-weight:800}
 .saved-list{display:grid;gap:11px;margin-top:22px}.saved-list article{display:grid;grid-template-columns:58px 1fr 32px;align-items:center;border:1px solid var(--line);border-radius:17px;padding:10px;background:#fff}.saved-thumb{height:58px;border-radius:13px;background:var(--gs);display:grid;place-items:center;color:var(--gd);font-size:11px;font-weight:900}.saved-main{border:0;background:transparent;text-align:left;display:grid;gap:3px;min-width:0}.saved-main b,.saved-main span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.saved-main span,.saved-main small{font-size:10px;color:var(--muted)}.delete-mini{border:0;background:transparent;font-size:20px;color:#9aa39d}.empty-state{min-height:360px;display:grid;place-content:center;text-align:center;gap:9px}.empty-state>div{font-size:34px;color:var(--g)}.empty-state p{color:var(--muted);font-size:13px}.empty-state .btn{margin-top:10px}
-.cart-list{display:grid;gap:9px;margin-top:20px}.cart-list label{display:grid;grid-template-columns:22px 1fr auto;align-items:center;gap:10px;padding:15px;border:1px solid var(--line);border-radius:15px;background:#fff}.cart-list input{width:20px;height:20px;accent-color:var(--g)}.cart-list button{border:0;background:transparent;color:#9b554e;font-size:11px}.cart-summary{display:flex;justify-content:space-between;margin-top:14px;padding:16px;background:var(--gs);border-radius:15px}.cart-summary span{color:var(--muted);font-size:13px}
 
 /* ── 실데이터 연동 후 추가된 스타일: 조정 내역 등장 애니메이션, 안내 박스, TTS, 스피너 ── */
 .change-section{margin-top:22px}
@@ -118,7 +117,6 @@ body{font-family:Pretendard,'Noto Sans KR',-apple-system,BlinkMacSystemFont,'Seg
 .search-results button b,.search-results button small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .search-results button small{color:var(--muted);font-size:11px}
 .form-error{color:#a9362c;font-size:12px;margin:0}
-.cart-amount{color:var(--muted);font-weight:400}
 .field-hint{font-size:11px;color:var(--muted);font-weight:400;margin-top:-2px}
 .field-hint.warn{color:#c66b19}
 .day-plan-entry{width:100%;margin-top:20px;display:flex;justify-content:space-between;align-items:center;gap:10px;border:1px dashed var(--g);background:var(--gs);border-radius:16px;padding:14px 15px;text-align:left}
@@ -230,8 +228,6 @@ body{font-size:16px}
 .ingredient-list{gap:7px}
 .ingredient-list li{font-size:13px;padding:11px}
 .ingredient-amt{font-size:12px;font-weight:700;color:var(--gd)}
-.cart-list label{padding:14px}
-.cart-list input{width:22px;height:22px}
 .info-box,.warning-box{padding:12px;margin-top:12px}
 .info-box b,.warning-box b{font-size:15px}
 .info-box span,.warning-box span{font-size:13px;line-height:1.55}
