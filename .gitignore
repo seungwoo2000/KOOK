@@ -5,6 +5,8 @@
 backend/.env
 frontend/.env
 frontend/.env.local
+# 배포용 백엔드 주소만 담긴 파일 (비밀값 아님 — Vercel 빌드가 이 값을 읽는다)
+!frontend/.env.production
 
 # ── 파이썬 ──────────────────────────────────────────────────────
 .venv/
