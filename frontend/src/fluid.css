@@ -401,3 +401,25 @@
 }
 .guest-profile small { font-size: var(--fs-xs); color: var(--muted); }
 .guest-profile b { font-size: var(--fs-sm); font-weight: 800; color: var(--gd); }
+
+/* ============================================================================
+   v23 — 실제 휴대폰 브라우저 대응
+   ========================================================================== */
+html, body {
+  /* 목록 끝에서 더 당길 때 앱 뒤 배경이 드러나거나 새로고침이 당겨지지 않게 */
+  overscroll-behavior: none;
+  /* 가로로는 절대 스크롤되지 않게 (긴 메뉴명·표가 삐져나오는 것 방지) */
+  overflow-x: hidden;
+}
+.phone {
+  /* dvh 미지원 브라우저는 svh → vh 순으로 대체된다.
+     주소창이 접혔다 펴져도 레이아웃이 튀지 않는 값부터 시도한다. */
+  height: 100vh;
+  height: 100svh;
+  height: min(100dvh, 920px);
+}
+@media (max-width: 470px) {
+  .phone { height: 100vh; height: 100svh; height: 100dvh; }
+}
+/* 본문만 스크롤되고 화면 전체는 고정 */
+.screen { -webkit-overflow-scrolling: touch; }
