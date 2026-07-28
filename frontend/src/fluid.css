@@ -349,34 +349,19 @@
 /* ============================================================================
    v22 — 스플래시 이미지 · 체험 안내 팝업 · 저장 목적지 통일
    ========================================================================== */
-/* 스플래시: 시안 이미지를 손대지 않고 그대로 한 화면으로 쓰고,
-   그림 속 '시작하기' 버튼 위에 투명한 진짜 버튼만 겹쳐 눌리게 한다.
-   위치 값은 이미지에서 픽셀 단위로 실측한 비율 (이미지가 바뀌면 다시 재야 함). */
+/* 스플래시: 온보딩 1~5와 완전히 같은 방식으로 그린다.
+   이미지 비율도 1.933으로 맞춰뒀으므로(위쪽에 배경색을 덧댐) 여섯 장이 동일하게 보인다. */
 .splash-shot {
   width: 100%; height: 100%;
-  background: #FAF4EC;
-  display: flex; align-items: flex-end; justify-content: center;
+  background: #F7ECDE;              /* 이미지 배경과 같은 색 */
   overflow: hidden;
 }
-/* 화면 비율에 맞춰 이미지를 '적당히' 키워 채운다.
-   · 화면이 이미지와 비슷한 비율이면 → 확대 없음, 좌우도 안 잘림
-   · 화면이 길면 → 최대 1.12배까지만 키워 채우고, 그래도 남는 곳은 배경색
-   이미지 원본 비율 1672/941 = 1.777. 100cqw = 앱 프레임 폭. */
-.splash-frame {
-  position: relative;
-  width: 100%;
-  height: min(100%, calc(100cqw * 1.777 * 1.12));
-  overflow: hidden;
-}
+.splash-frame { position: relative; width: 100%; height: 100%; }
 .splash-frame img {
-  display: block;
-  width: 100%; height: 100%;
-  object-fit: cover; object-position: bottom center;
-}
-@supports not (width: 100cqw) {
-  /* 컨테이너 쿼리 미지원 브라우저: 확대 없이 폭에 맞춘다 */
-  .splash-frame { height: auto; }
-  .splash-frame img { height: auto; }
+  display: block; width: 100%; height: 100%;
+  /* 홈은 하단에 시작하기 버튼이 있으므로 아래에 붙인다.
+     남는 공간은 위(로고 위 여백)로 가고 배경색이 같아 이어져 보인다. */
+  object-fit: contain; object-position: bottom center;
 }
 
 /* 그림 속 '시작하기' 버튼 위에 겹치는 투명 버튼.
@@ -384,7 +369,7 @@
    위치는 이미지에서 실측한 비율 (이미지가 바뀌면 다시 재야 함). */
 .splash-hit {
   position: absolute;
-  left: 12.1%; right: 13.1%; top: 90.5%; bottom: 1.4%;
+  left: 12.1%; right: 13.1%; top: 91.3%; bottom: 1.3%;
   border: 0; background: transparent; padding: 0;
   border-radius: 999px; cursor: pointer;
   -webkit-tap-highlight-color: transparent;
