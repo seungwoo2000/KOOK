@@ -778,6 +778,14 @@ function BackHeader({
         >
           ‹
         </button>
+        {/* 어느 화면에 있어도 브랜드가 보이도록 왼쪽 위에 로고를 둔다. 누르면 홈으로. */}
+        <button
+          className="header-brand"
+          aria-label="KOOK 홈으로"
+          onClick={() => nav("/home")}
+        >
+          <Logo />
+        </button>
         {title && <b className="header-lead-title">{title}</b>}
       </div>
       <div className="header-actions">
@@ -872,11 +880,12 @@ function Splash({ onStart }: { onStart: () => void }) {
               alt="오늘 뭐 먹지? 고민에 푹 빠질 땐 KOOK이 도와드립니다"
               onError={() => setShotFailed(true)}
             />
-            {/* 그림 속 '시작하기' 버튼을 실제 버튼으로 덮는다.
-                투명하게 두면 눌리는지 알 수 없고, 이미지가 잘리면 아예 안 보인다. */}
-            <button className="splash-hit" onClick={onStart}>
-              시작하기 <i>→</i>
-            </button>
+            {/* 그림 속 '시작하기' 버튼 위에 겹치는 투명 버튼 — 그림 그대로 두고 누르기만 되게 */}
+            <button
+              className="splash-hit"
+              onClick={onStart}
+              aria-label="시작하기"
+            />
           </div>
         </div>
       </Shell>
@@ -952,7 +961,11 @@ function Onboarding() {
             alt={`${s[0]} ${s[1]} — ${s[2]}`}
             onError={() => setShotFailed(true)}
           />
-          <button className="skip float" onClick={finish}>
+          {/* 이미지 화면에도 왼쪽 위에 로고를 얹는다. 건너뛰기는 반대쪽으로. */}
+          <span className="shot-brand" aria-hidden="true">
+            <Logo />
+          </span>
+          <button className="skip float right" onClick={finish}>
             건너뛰기
           </button>
         </div>
