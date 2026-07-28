@@ -777,6 +777,14 @@ function BackHeader({
         >
           ‹
         </button>
+        {/* 어느 화면에 있어도 브랜드가 보이도록 왼쪽 위에 로고를 둔다. 누르면 홈으로. */}
+        <button
+          className="header-brand"
+          aria-label="KOOK 홈으로"
+          onClick={() => nav("/home")}
+        >
+          <Logo />
+        </button>
         {title && <b className="header-lead-title">{title}</b>}
       </div>
       <div className="header-actions">
@@ -952,7 +960,11 @@ function Onboarding() {
             alt={`${s[0]} ${s[1]} — ${s[2]}`}
             onError={() => setShotFailed(true)}
           />
-          <button className="skip float" onClick={finish}>
+          {/* 이미지 화면에도 왼쪽 위에 로고를 얹고, 건너뛰기는 반대쪽으로 보낸다 */}
+          <span className="shot-brand" aria-hidden="true">
+            <Logo />
+          </span>
+          <button className="skip float right" onClick={finish}>
             건너뛰기
           </button>
         </div>
