@@ -352,18 +352,18 @@
 /* ============================================================================
    v22 — 스플래시 이미지 · 체험 안내 팝업 · 저장 목적지 통일
    ========================================================================== */
-/* 스플래시: 온보딩 1~5와 완전히 같은 방식으로 그린다.
-   이미지 비율도 1.933으로 맞춰뒀으므로(위쪽에 배경색을 덧댐) 여섯 장이 동일하게 보인다. */
+/* 스플래시: 시안 이미지를 자르거나 덧대지 않고 원본 그대로 보여준다.
+   홈은 하단 버튼이 없어 화면 전체를 쓰므로, PC에서는 아래 :has() 규칙으로
+   화면 틀 자체를 이 이미지 비율(941/1672)에 맞춰 여백 없이 딱 맞춘다. */
 .splash-shot {
   width: 100%; height: 100%;
-  background: #F7ECDE;              /* 이미지 배경과 같은 색 */
+  /* 이미지 맨 윗줄과 같은 색 — 세로가 긴 폰에서 위에 남는 공간이 이어져 보인다 */
+  background: #FAF4ED;
   overflow: hidden;
 }
 .splash-frame { position: relative; width: 100%; height: 100%; }
 .splash-frame img {
   display: block; width: 100%; height: 100%;
-  /* 홈은 하단에 시작하기 버튼이 있으므로 아래에 붙인다.
-     남는 공간은 위(로고 위 여백)로 가고 배경색이 같아 이어져 보인다. */
   object-fit: contain; object-position: bottom center;
 }
 
@@ -372,7 +372,7 @@
    위치는 이미지에서 실측한 비율 (이미지가 바뀌면 다시 재야 함). */
 .splash-hit {
   position: absolute;
-  left: 12.1%; right: 13.1%; top: 91.3%; bottom: 1.3%;
+  left: 12.1%; right: 13.1%; top: 90.5%; bottom: 1.4%;
   border: 0; background: transparent; padding: 0;
   border-radius: 999px; cursor: pointer;
   -webkit-tap-highlight-color: transparent;
@@ -459,11 +459,15 @@ html, body {
    ========================================================================== */
 @media (min-width: 471px) {
   .phone {
+    /* 기본: 온보딩 1~5 이미지 비율(하단 버튼 높이 포함) */
     aspect-ratio: 941 / 1819;
     height: min(calc(100dvh - 36px), 920px);
     width: auto;
     max-width: none;
   }
+  /* 스플래시는 하단 버튼이 없어 화면 전체가 이미지다.
+     그 화면일 때만 틀을 홈 이미지 비율로 바꿔 여백을 없앤다. */
+  .phone:has(.splash-shot) { aspect-ratio: 941 / 1672; }
 }
 
 /* 온보딩 단계 화면은 하단 버튼을 낮춰 그림이 최대한 커지게 한다 */
