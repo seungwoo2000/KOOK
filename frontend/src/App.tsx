@@ -122,7 +122,31 @@ const storage = {
     localStorage.setItem(key, JSON.stringify(value));
   },
 };
-const API = (import.meta as any).env.VITE_API_URL || "http://127.0.0.1:8000";
+// 백엔드 주소. 평소에는 빌드 시점에 박힌 값(.env.production)을 쓴다.
+//
+// 비상용 우회로: 배포된 백엔드가 죽었을 때 주소 뒤에 ?api=... 를 붙이면
+// 그 백엔드로 갈아탄다. 한 번 붙이면 브라우저에 기억되므로 이후에는 그냥 열면 된다.
+//   예) https://kook-omega.vercel.app/?api=https://abc-def.trycloudflare.com
+// 원래대로 되돌리려면  ?api=reset  으로 열면 된다.
+const API = (() => {
+  const fallback =
+    (import.meta as any).env.VITE_API_URL || "http://127.0.0.1:8000";
+  try {
+    const q = new URLSearchParams(location.search).get("api");
+    if (q === "reset") {
+      localStorage.removeItem("fook:api");
+      return fallback;
+    }
+    if (q) {
+      const url = q.replace(/\/+$/, "");
+      localStorage.setItem("fook:api", url);
+      return url;
+    }
+    return localStorage.getItem("fook:api") || fallback;
+  } catch {
+    return fallback;
+  }
+})();
 const currentUser = () => storage.get<SavedUser | null>("fook:user", null);
 const authToken = () => localStorage.getItem("fook:token") || "";
 async function apiFetch(path: string, options: RequestInit = {}) {
