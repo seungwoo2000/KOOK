@@ -156,7 +156,9 @@ async function apiFetch(path: string, options: RequestInit = {}) {
   const token = authToken();
   if (token) headers.set("Authorization", `Bearer ${token}`);
   const controller = new AbortController();
-  const tid = setTimeout(() => controller.abort(), 12000);
+  // 무료 호스팅은 요청이 없으면 잠들고, 깨어나는 데 1분 가까이 걸린다.
+  // 12초로 끊으면 잠든 직후의 첫 요청이 무조건 실패하므로 넉넉히 잡는다.
+  const tid = setTimeout(() => controller.abort(), 75000);
   try {
     const r = await fetch(`${API}${path}`, {
       ...options,
@@ -679,6 +681,11 @@ function App() {
   // 예전엔 한 번 본 사람은 건너뛰도록 localStorage 플래그를 봤는데, 그 기록이 남아 있으면
   // 링크를 열자마자 검색 화면이 떠버려서(소개도 로그인도 안 보임) 그 분기를 없앴다.
   const firstRoute = "/onboarding";
+  // 무료 호스팅 백엔드는 한동안 요청이 없으면 잠든다. 사용자가 소개 화면을
+  // 넘기는 동안 미리 깨워두면, 회원가입/로그인 차례에는 이미 준비된 상태가 된다.
+  useEffect(() => {
+    fetch(`${API}/health`).catch(() => {});
+  }, []);
   const [profile, setProfile] = useState(initialProfile);
   const [plan, setPlan] = useState<Plan>(fallbackPlan);
   // 검색창은 빈 값으로 시작한다. (비회원 '한 끼 체험'만 예시 메뉴를 채워 넣는다)
@@ -966,7 +973,7 @@ function Splash({ onStart }: { onStart: () => void }) {
             </div>
           ))}
         </div>
-        <p className="splash-caption">혈액투석 환자 맞춤형 AI 식단 관리 솔루션</p>
+        <p className="splash-caption">혈액투석 환자를 위한  맞춤형 AI 식단 관리 솔루션</p>
       </div>
     </Shell>
   );
