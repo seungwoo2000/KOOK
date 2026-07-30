@@ -973,7 +973,7 @@ function Splash({ onStart }: { onStart: () => void }) {
             </div>
           ))}
         </div>
-        <p className="splash-caption">혈액투석 환자를 위한  맞춤형 AI 식단 관리 솔루션</p>
+        <p className="splash-caption">혈액투석 환자를 위한 AI 기반 맞춤형 식단 관리 및 레시피 재구성 솔루션</p>
       </div>
     </Shell>
   );

@@ -32,3 +32,6 @@ Thumbs.db
 
 # Hugging Face Space 배포용 임시 사본 (별도 LFS 저장소)
 .hf-deploy/
+
+# 레버 로직 수동 백업본 (디스크에만 두고 저장소에는 올리지 않는다)
+*.bak_*
