@@ -129,7 +129,7 @@ body { background: var(--paper); }
 
 /* ── 재조정 로딩 + 조정 항목 ── */
 .adjust-loader { display: grid; justify-items: center; gap: 8px; text-align: center; padding: 22px 12px; }
-.adjust-loader.card { background: #fff; border: 1px solid var(--line); border-radius: 20px; margin-top: 14px; }
+
 .adjust-ring {
   width: 84px; height: 84px; border-radius: 50%; display: grid; place-items: center;
   background: var(--gs); color: var(--gd); border: 4px dotted #cfe0c6; padding: 22px;
@@ -265,12 +265,8 @@ body { background: var(--paper); }
 }
 .meal-list.numbered .meal-row-name { font-size: 18px; font-weight: 700; }
 .meal-row-sub { font-size: 12px; color: var(--muted); }
-.two-actions button {
-  display: flex; align-items: center; justify-content: center; gap: 8px;
-  border: 1px solid var(--line); background: #fff; border-radius: 14px;
-  min-height: 54px; font-size: 14px; font-weight: 700; color: var(--ink);
-}
-.two-actions svg { width: 18px; height: 18px; color: var(--gd); }
+
+
 
 /* ── 영양 적합성 분석 ── */
 .analysis-title { font-size: 28px; font-weight: 900; margin: 4px 0 8px; }
@@ -387,16 +383,14 @@ body { background: var(--paper); }
 .adjust-badge em { font-style: normal; font-weight: 900; }
 
 /* 최종 영양소: 재구성 전 | 후 비교표 */
-.ba-table { border: 1px solid var(--line); border-radius: 14px; overflow: hidden; background: #fff; }
+
 .ba-head span:not(:first-child), .ba-row > span:not(:first-child) { text-align: right; }
-.ba-before small, .ba-after small { font-size: 11px; font-weight: 600; }
-.ba-after.over { color: var(--over); }
-.ba-after.under { color: var(--under); }
-.ba-after em {
-  display: block; margin-top: 3px; font-style: normal; font-size: 11px; font-weight: 800;
-}
-.ba-after em.down { color: var(--g); }
-.ba-after em.up { color: var(--over); }
+
+
+
+
+
+
 .ba-note { margin: 9px 0 0; font-size: 11px; color: var(--muted); }
 
 /* 완성 화면 하단 3탭 */
@@ -500,16 +494,15 @@ body { background: var(--paper); }
 .pc-plain { grid-column: 1 / -1; color: var(--muted); }
 
 /* ── 최종 영양소 비교표: 열 구분 색/선 ── */
-.ba-head, .ba-row { grid-template-columns: 1.05fr 1fr 1.15fr; }
-.ba-head span, .ba-row > span { padding: 0 8px; }
-.ba-head span + span, .ba-row > span + span { border-left: 1px solid var(--line); }
-.ba-head span:nth-child(2), .ba-row > span:nth-child(2) { background: #f7f5ef; }
-.ba-head span:nth-child(3), .ba-row > span:nth-child(3) { background: #f0f6ec; }
-.ba-head span, .ba-row > span { padding: 12px 10px; min-height: 46px; display: flex;
-  flex-direction: column; justify-content: center; }
+
+
+
+
+
+
 .ba-head span:not(:first-child), .ba-row > span:not(:first-child) { align-items: flex-end; }
-.ba-row > span:first-child { background: #fff; }
-.ba-head span:first-child { background: #f4f2ec; }
+
+
 
 @media (max-width: 430px) {
   .nutri-card { grid-template-columns: 32px 1fr auto; gap: 9px; padding: 12px; }

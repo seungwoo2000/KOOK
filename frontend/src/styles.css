@@ -1,5 +1,5 @@
 
-:root{font-family:Pretendard,"Noto Sans KR",Inter,system-ui,-apple-system,sans-serif;color:#29241f;background:#f4f1eb;--g:#7f9560;--gd:#55683f;--gs:#f3f5ed;--line:#e7e2d8;--muted:#756f67;--warn:#c88f42;--red:#a9362c;--ink:#3b3129;--cream:#fbfaf6}*{box-sizing:border-box}body{margin:0;min-width:320px;min-height:100vh}button,input{font:inherit}button{cursor:pointer}.page{min-height:100vh;display:grid;place-items:center;padding:18px}.phone{width:min(100%,390px);height:min(844px,calc(100vh - 36px));background:var(--cream);border-radius:32px;box-shadow:0 24px 70px #28452f22;overflow:hidden;display:flex;flex-direction:column;position:relative}.header{height:76px;display:flex;align-items:center;justify-content:space-between;padding:12px 20px;border-bottom:1px solid #f1f3f1;flex:0 0 auto}.logo-button{border:0;background:none;padding:0;width:58px;height:58px;display:grid;place-items:center}.logo-button img{width:100%;height:100%;object-fit:contain;mix-blend-mode:multiply}.avatar{width:36px;height:36px;border:0;border-radius:50%;background:var(--gs);color:var(--gd);font-weight:800}.screen{flex:1;min-height:0;padding:24px;overflow-y:auto;overscroll-behavior:contain}.footer{flex:0 0 auto;padding:12px 22px max(20px,env(safe-area-inset-bottom));background:#fffc;border-top:1px solid #f2f3f2}.btn{width:100%;min-height:54px;border:0;border-radius:16px;background:var(--g);color:#fff;font-weight:800;box-shadow:0 9px 24px #3f8f5a22}.btn:disabled{opacity:.4}.btn-secondary{background:#fff;color:var(--gd);border:1px solid #bad3bf;box-shadow:none}.eyebrow{margin:0 0 9px;color:var(--g);font-weight:800;font-size:14px}h1{font-size:30px;line-height:1.28;letter-spacing:-.045em;margin:0;white-space:pre-line}h2,h3{letter-spacing:-.03em}.sub{color:var(--muted);line-height:1.65;margin:14px 0 0}.onboarding-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px}.skip{border:0;background:none;color:var(--muted)}.visual-card{margin:26px 0 18px;border:1px solid var(--line);background:linear-gradient(#fffdf8,#f4f3ea);border-radius:24px;padding:14px;min-height:270px;display:flex;flex-direction:column;justify-content:center;overflow:hidden}.visual-card img{width:100%;border-radius:17px;object-fit:cover}.hero img{height:270px;object-position:center;filter:saturate(.88)}.food-hero img{height:190px}.fake-search{background:#fff;border:1px solid var(--line);padding:13px 14px;border-radius:13px;margin-bottom:12px;color:#48554c}.role-pills span,.quick-nutrition span{padding:7px 10px;border-radius:999px;background:#fff;border:1px solid var(--line);font-size:11px;color:var(--gd)}.compare-mini img{height:90px}.compare-mini>span{text-align:center;color:var(--g);font-weight:800}.action-icons span{background:#fff;border:1px solid var(--line);border-radius:13px;padding:11px;text-align:center;font-size:12px}.dot{width:7px;height:7px;border:0;border-radius:20px;background:#d9dfda;padding:0}.dot.active{width:22px;background:var(--g)}.center-brand img{width:190px;max-height:190px;object-fit:contain;mix-blend-mode:multiply}.choice-card img,.choice-illustration{width:86px;height:76px;border-radius:15px;object-fit:cover}.choice-card b{display:block;margin-bottom:6px}.choice-card span{font-size:12px;color:var(--muted);line-height:1.5}.form{display:grid;gap:18px;margin-top:28px}.form label{display:grid;gap:8px;font-size:14px;font-weight:800}.segments{display:grid;grid-template-columns:1fr 1fr;gap:8px}.segment{min-height:48px;border:1px solid var(--line);background:#fff;border-radius:14px}.segment.active{background:var(--gs);border-color:var(--g);color:var(--gd)}.field{display:flex;align-items:center;border:1px solid var(--line);border-radius:14px;padding:0 14px}.field input{height:50px;border:0;outline:0;flex:1;min-width:0}.field span{color:var(--muted);font-weight:500}.dialysis-cards{display:grid;gap:12px;margin-top:26px}.dialysis-card{position:relative;border:1px solid var(--line);border-radius:20px;background:#fff;padding:18px;display:grid;grid-template-columns:55px 1fr;grid-template-rows:auto auto;text-align:left;column-gap:14px;align-items:center}.dialysis-card.selected{border:2px solid var(--g);background:var(--gs)}.medical-icon{grid-row:1/3;width:52px;height:52px;display:grid;place-items:center;border-radius:15px;background:#fff;border:1px solid var(--line);color:var(--g);font-weight:900}.dialysis-card span{color:var(--muted);font-size:12px}.dialysis-card i{position:absolute;right:16px;top:16px;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:var(--g);color:#fff;font-style:normal}.modal-bg{position:absolute;inset:0;background:#17211977;z-index:10;display:grid;place-items:end center;padding:18px}.modal{width:100%;background:#fff;border-radius:25px;padding:24px;text-align:center}.modal-mark{width:42px;height:42px;margin:auto;border-radius:50%;display:grid;place-items:center;background:var(--gs);color:var(--g);font-weight:900}.modal h2{font-size:21px}.modal p{color:var(--muted);line-height:1.6;font-size:14px}.tabs{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--line);margin-top:26px}.tab{min-height:48px;border:0;border-bottom:2px solid transparent;background:none;color:var(--muted)}.tab.active{color:var(--gd);font-weight:800;border-bottom-color:var(--g)}.search{margin-top:17px;display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:15px;padding:0 14px}.search input{height:50px;border:0;outline:0;flex:1;min-width:0}.section-title{font-size:15px;margin:27px 0 11px}.chips{display:flex;flex-wrap:wrap;gap:8px}.chips button{padding:9px 13px;border-radius:999px;border:1px solid var(--line);background:#fff;color:#48534b}.chips.selected button{background:var(--gs);color:var(--gd);border-color:#bdd5c1}.recommend img{width:105px;height:86px;object-fit:cover;border-radius:14px}.recommend b,.recommend span{display:block}.recommend span{color:var(--muted);font-size:12px;margin-top:6px}.loading-page{text-align:center}.loader-plate{width:225px;height:225px;margin:35px auto 22px;border-radius:50%;position:relative;display:grid;place-items:center;background:var(--gs)}.loader-plate img{width:168px;height:168px;border-radius:50%;object-fit:cover}.orbit{position:absolute;inset:0;border:3px solid transparent;border-top-color:var(--g);border-right-color:#9fc2a4;border-radius:50%;animation:spin 1.4s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}.loading-message{font-weight:800}.progress{height:9px;border-radius:99px;background:#e7ede8;overflow:hidden}.progress i{display:block;height:100%;background:var(--g);transition:width .5s}.loading-list div{display:flex;gap:9px}.loading-list .done{color:var(--gd)}.meal-card span{display:block;color:var(--g);font-size:11px;font-weight:800}.meal-card b{display:block;margin-top:6px;font-size:15px}.nutrient-row b,.nutrient-row small{display:block}.nutrient-row small{font-size:10px;color:var(--muted);margin-top:3px}.nutrient-value strong{font-size:17px}.nutrient-value span{font-size:11px;color:var(--muted)}.nutrient-value em{margin-left:7px;font-style:normal;color:var(--g);background:var(--gs);padding:5px 7px;border-radius:99px;font-size:10px}.nutrient-value em.warning{color:#c66b19;background:#fff1e3}.warning-box{margin-top:14px;border:1px solid #ffd1a8;background:#fff7ef;border-radius:16px;padding:14px}.warning-box b,.warning-box span{display:block}.warning-box b{color:#c66b19}.warning-box span{font-size:12px;color:var(--muted);margin-top:5px}.food-before img,.food-after img{width:100%;height:110px;object-fit:cover;border-radius:13px}.food-before span,.food-after span{display:block;margin-top:7px;font-size:12px}.food-after.show{opacity:1;transform:none}.ingredient{padding:12px;border-radius:14px;background:#fff4eb;color:#a65d1d;transition:.8s}.ingredient.leave{opacity:.25;transform:translateY(-12px)}.ingredient.enter{opacity:.2;transform:translateY(12px);background:var(--gs);color:var(--gd)}.ingredient.enter.active{opacity:1;transform:none}.change-list div{opacity:0;transform:translateY(8px);transition:.45s;padding:10px 12px;background:var(--gs);border-radius:12px;color:var(--gd);font-size:13px}.change-list div.show{opacity:1;transform:none}.comparison{margin-top:24px;display:grid;grid-template-columns:1fr 24px 1fr;gap:7px;align-items:center}.comparison section{border:1px solid var(--line);border-radius:17px;padding:9px}.comparison img{width:100%;height:100px;object-fit:cover;border-radius:12px;margin:8px 0}.comparison b,.comparison p{display:block;font-size:12px}.comparison p{color:var(--muted);line-height:1.5}.reason-card p{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:0}.final-hero img{width:100%;height:220px;object-fit:cover;border-radius:22px}.final-hero span{position:absolute;right:12px;top:12px;background:var(--g);color:#fff;padding:8px 10px;border-radius:99px;font-size:11px}.action-grid button{border:1px solid var(--line);background:#fff;border-radius:15px;padding:12px 6px;font-weight:800}.action-grid span{display:block;font-size:10px;margin-top:5px}.recipe-links button{display:grid;grid-template-columns:50px 1fr 20px;align-items:center;text-align:left;border:1px solid var(--line);border-radius:14px;background:#fff;padding:12px}.recipe-links span{font-size:10px;color:var(--g)}.recipe-links i{text-align:right;font-style:normal}.recipe-hero img{width:100%;height:230px;object-fit:cover;border-radius:21px}.recipe-hero span{position:absolute;right:12px;top:12px;background:var(--gs);color:var(--gd);border-radius:99px;padding:7px 9px;font-size:10px}.recipe-title{margin-top:18px}.ingredient-list li{background:var(--gs);border-radius:12px;padding:10px;font-size:12px}.steps{list-style:none;padding:0;display:grid;gap:13px}.steps li{display:grid;grid-template-columns:28px 1fr;gap:9px}.steps li>span{width:27px;height:27px;border-radius:50%;display:grid;place-items:center;background:var(--g);color:#fff;font-size:12px}.steps p{margin:2px 0;color:#455148;line-height:1.55;font-size:13px}.pdf-page{background:#fff;border:1px solid var(--line);padding:18px;box-shadow:0 8px 25px #1f292311}.pdf-brand{display:flex;align-items:center;gap:12px;border-bottom:2px solid var(--g);padding-bottom:10px}.pdf-brand img{width:58px}.pdf-brand b,.pdf-brand span{display:block}.pdf-brand span{font-size:10px;color:var(--muted)}.pdf-page h2{font-size:22px}.pdf-page h3{font-size:13px;color:var(--gd);margin-top:18px}.pdf-page table{width:100%;border-collapse:collapse;font-size:11px}.pdf-page th,.pdf-page td{border-bottom:1px solid #e9ece9;padding:7px;text-align:left}.pdf-page p,.pdf-page li{font-size:10px;line-height:1.55}@media(max-width:430px){.page{padding:0;display:block;background:#fff}.phone{width:100%;height:100dvh;border-radius:0;box-shadow:none}}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+:root{font-family:Pretendard,"Noto Sans KR",Inter,system-ui,-apple-system,sans-serif;color:#29241f;background:#f4f1eb;--g:#7f9560;--gd:#55683f;--gs:#f3f5ed;--line:#e7e2d8;--muted:#756f67;--warn:#c88f42;--red:#a9362c;--ink:#3b3129;--cream:#fbfaf6}*{box-sizing:border-box}body{margin:0;min-width:320px;min-height:100vh}button,input{font:inherit}button{cursor:pointer}.page{min-height:100vh;display:grid;place-items:center;padding:18px}.phone{width:min(100%,390px);height:min(844px,calc(100vh - 36px));background:var(--cream);border-radius:32px;box-shadow:0 24px 70px #28452f22;overflow:hidden;display:flex;flex-direction:column;position:relative}.header{height:76px;display:flex;align-items:center;justify-content:space-between;padding:12px 20px;border-bottom:1px solid #f1f3f1;flex:0 0 auto}.logo-button{border:0;background:none;padding:0;width:58px;height:58px;display:grid;place-items:center}.logo-button img{width:100%;height:100%;object-fit:contain;mix-blend-mode:multiply}.avatar{width:36px;height:36px;border:0;border-radius:50%;background:var(--gs);color:var(--gd);font-weight:800}.screen{flex:1;min-height:0;padding:24px;overflow-y:auto;overscroll-behavior:contain}.footer{flex:0 0 auto;padding:12px 22px max(20px,env(safe-area-inset-bottom));background:#fffc;border-top:1px solid #f2f3f2}.btn{width:100%;min-height:54px;border:0;border-radius:16px;background:var(--g);color:#fff;font-weight:800;box-shadow:0 9px 24px #3f8f5a22}.btn:disabled{opacity:.4}.btn-secondary{background:#fff;color:var(--gd);border:1px solid #bad3bf;box-shadow:none}.eyebrow{margin:0 0 9px;color:var(--g);font-weight:800;font-size:14px}h1{font-size:30px;line-height:1.28;letter-spacing:-.045em;margin:0;white-space:pre-line}h2,h3{letter-spacing:-.03em}.sub{color:var(--muted);line-height:1.65;margin:14px 0 0}.onboarding-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px}.skip{border:0;background:none;color:var(--muted)}.visual-card{margin:26px 0 18px;border:1px solid var(--line);background:linear-gradient(#fffdf8,#f4f3ea);border-radius:24px;padding:14px;min-height:270px;display:flex;flex-direction:column;justify-content:center;overflow:hidden}.visual-card img{width:100%;border-radius:17px;object-fit:cover}.fake-search{background:#fff;border:1px solid var(--line);padding:13px 14px;border-radius:13px;margin-bottom:12px;color:#48554c}.dot{width:7px;height:7px;border:0;border-radius:20px;background:#d9dfda;padding:0}.dot.active{width:22px;background:var(--g)}.form{display:grid;gap:18px;margin-top:28px}.form label{display:grid;gap:8px;font-size:14px;font-weight:800}.segments{display:grid;grid-template-columns:1fr 1fr;gap:8px}.segment{min-height:48px;border:1px solid var(--line);background:#fff;border-radius:14px}.segment.active{background:var(--gs);border-color:var(--g);color:var(--gd)}.field{display:flex;align-items:center;border:1px solid var(--line);border-radius:14px;padding:0 14px}.field input{height:50px;border:0;outline:0;flex:1;min-width:0}.field span{color:var(--muted);font-weight:500}.dialysis-cards{display:grid;gap:12px;margin-top:26px}.dialysis-card{position:relative;border:1px solid var(--line);border-radius:20px;background:#fff;padding:18px;display:grid;grid-template-columns:55px 1fr;grid-template-rows:auto auto;text-align:left;column-gap:14px;align-items:center}.dialysis-card.selected{border:2px solid var(--g);background:var(--gs)}.medical-icon{grid-row:1/3;width:52px;height:52px;display:grid;place-items:center;border-radius:15px;background:#fff;border:1px solid var(--line);color:var(--g);font-weight:900}.dialysis-card span{color:var(--muted);font-size:12px}.dialysis-card i{position:absolute;right:16px;top:16px;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:var(--g);color:#fff;font-style:normal}.modal-bg{position:absolute;inset:0;background:#17211977;z-index:10;display:grid;place-items:end center;padding:18px}.modal{width:100%;background:#fff;border-radius:25px;padding:24px;text-align:center}.modal-mark{width:42px;height:42px;margin:auto;border-radius:50%;display:grid;place-items:center;background:var(--gs);color:var(--g);font-weight:900}.modal h2{font-size:21px}.modal p{color:var(--muted);line-height:1.6;font-size:14px}.tabs{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--line);margin-top:26px}.tab{min-height:48px;border:0;border-bottom:2px solid transparent;background:none;color:var(--muted)}.tab.active{color:var(--gd);font-weight:800;border-bottom-color:var(--g)}.search{margin-top:17px;display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:15px;padding:0 14px}.search input{height:50px;border:0;outline:0;flex:1;min-width:0}.section-title{font-size:15px;margin:27px 0 11px}.chips{display:flex;flex-wrap:wrap;gap:8px}.chips button{padding:9px 13px;border-radius:999px;border:1px solid var(--line);background:#fff;color:#48534b}.chips.selected button{background:var(--gs);color:var(--gd);border-color:#bdd5c1}.loading-page{text-align:center}.loader-plate{width:225px;height:225px;margin:35px auto 22px;border-radius:50%;position:relative;display:grid;place-items:center;background:var(--gs)}.loader-plate img{width:168px;height:168px;border-radius:50%;object-fit:cover}.orbit{position:absolute;inset:0;border:3px solid transparent;border-top-color:var(--g);border-right-color:#9fc2a4;border-radius:50%;animation:spin 1.4s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}.loading-message{font-weight:800}.progress{height:9px;border-radius:99px;background:#e7ede8;overflow:hidden}.progress i{display:block;height:100%;background:var(--g);transition:width .5s}.warning-box{margin-top:14px;border:1px solid #ffd1a8;background:#fff7ef;border-radius:16px;padding:14px}.warning-box b,.warning-box span{display:block}.warning-box b{color:#c66b19}.warning-box span{font-size:12px;color:var(--muted);margin-top:5px}.ingredient{padding:12px;border-radius:14px;background:#fff4eb;color:#a65d1d;transition:.8s}.comparison{margin-top:24px;display:grid;grid-template-columns:1fr 24px 1fr;gap:7px;align-items:center}.comparison section{border:1px solid var(--line);border-radius:17px;padding:9px}.comparison img{width:100%;height:100px;object-fit:cover;border-radius:12px;margin:8px 0}.comparison b,.comparison p{display:block;font-size:12px}.comparison p{color:var(--muted);line-height:1.5}.recipe-title{margin-top:18px}.steps{list-style:none;padding:0;display:grid;gap:13px}.steps li{display:grid;grid-template-columns:28px 1fr;gap:9px}.steps li>span{width:27px;height:27px;border-radius:50%;display:grid;place-items:center;background:var(--g);color:#fff;font-size:12px}.steps p{margin:2px 0;color:#455148;line-height:1.55;font-size:13px}.pdf-page{background:#fff;border:1px solid var(--line);padding:18px;box-shadow:0 8px 25px #1f292311}.pdf-brand{display:flex;align-items:center;gap:12px;border-bottom:2px solid var(--g);padding-bottom:10px}.pdf-brand img{width:58px}.pdf-brand b,.pdf-brand span{display:block}.pdf-brand span{font-size:10px;color:var(--muted)}.pdf-page h2{font-size:22px}.pdf-page h3{font-size:13px;color:var(--gd);margin-top:18px}.pdf-page table{width:100%;border-collapse:collapse;font-size:11px}.pdf-page th,.pdf-page td{border-bottom:1px solid #e9ece9;padding:7px;text-align:left}.pdf-page p,.pdf-page li{font-size:10px;line-height:1.55}@media(max-width:430px){.page{padding:0;display:block;background:#fff}.phone{width:100%;height:100dvh;border-radius:0;box-shadow:none}}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 
 .header-actions{display:flex;align-items:center;gap:7px}.detail-header{position:sticky;top:0;z-index:5;background:#fff}.pdf-footer-actions{display:grid;grid-template-columns:1fr 1.25fr;gap:8px}.meal-recipe-table{table-layout:fixed}.meal-recipe-table th:nth-child(1){width:11%}.meal-recipe-table th:nth-child(2){width:18%}.meal-recipe-table th:nth-child(3){width:28%}.meal-recipe-table th:nth-child(4){width:43%}.meal-recipe-table th,.meal-recipe-table td{vertical-align:top;word-break:keep-all}.meal-recipe-table ul,.meal-recipe-table ol{margin:0;padding-left:13px}.meal-recipe-table li{margin-bottom:3px}.nutrition-pdf-table th,.nutrition-pdf-table td{text-align:center}.pdf-page{width:100%;min-width:680px}.screen:has(.pdf-page){overflow-x:auto}.pdf-page h3{page-break-after:avoid}.meal-recipe-table tr{page-break-inside:avoid}
 @media(max-width:430px){.pdf-page{transform-origin:top left;min-width:680px}}
@@ -7,7 +7,7 @@
 /* FOOK original logo branding */
 .onboarding-top{margin-bottom:18px}.pdf-brand img{width:82px;height:82px;object-fit:contain;mix-blend-mode:multiply}.header,.footer{background:rgba(251,250,246,.96)}.btn{background:linear-gradient(135deg,var(--gd),var(--g))}
 /* v4: 통합 식단 조정 결과 */
-.change-section{margin:22px 0 28px}.change-heading{display:flex;gap:12px;align-items:center;margin-bottom:12px}.change-heading>span{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#eef4e8;color:#56733c;font-weight:800}.change-heading div{display:flex;flex-direction:column}.change-heading b{font-size:17px}.change-heading small{margin-top:3px;color:#777}.change-card{border:1px solid #e5e1d8;border-radius:16px;padding:15px;margin-top:10px;background:#fffdf8;box-shadow:0 5px 18px rgba(75,62,42,.05)}.change-card-title{display:flex;justify-content:space-between;align-items:center}.change-card-title span{font-size:12px;padding:5px 9px;border-radius:999px;background:#edf5e9;color:#56733c}.amount-flow{display:grid;grid-template-columns:1fr 34px 1fr;align-items:center;margin:14px 0 8px}.amount-flow strong{padding:12px;border-radius:12px;background:#f5f2eb;text-align:center}.amount-flow strong:last-child{background:#eaf4e5;color:#3f6f2e}.amount-flow i{text-align:center;font-style:normal;color:#668c51;font-weight:800}.change-card p{margin:7px 0 0;color:#666;font-size:13px;line-height:1.55}.nutrient-compare-row span,.nutrient-compare-row strong{text-align:right}.nutrient-compare-row strong{color:#3f7434}.pdf-hero-space{height:185px}.pdf-page{font-family:Arial,'Noto Sans KR',sans-serif}.pdf-brand{border-bottom:2px solid #5d8761;padding-bottom:12px}.pdf-brand img{width:58px;height:58px;object-fit:contain}.pdf-page h2{font-size:25px;margin:22px 0 0}.pdf-page h3{color:#3d7550;font-size:16px;margin:0 0 10px}.meal-recipe-table,.nutrition-pdf-table{font-size:10px}.meal-recipe-table th,.meal-recipe-table td,.nutrition-pdf-table th,.nutrition-pdf-table td{padding:8px 7px;vertical-align:top}.search-results button{display:grid;grid-template-columns:54px 1fr 20px;align-items:center;gap:11px;border:1px solid var(--line);background:#fff;border-radius:15px;padding:9px;text-align:left}.search-results img{width:54px;height:48px;object-fit:cover;border-radius:11px}.search-results span{min-width:0}.search-results b,.search-results small{display:block}.search-results b{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.search-results small{font-size:10px;color:var(--muted);margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.search-results i{font-style:normal;color:var(--g)}.onboarding-nav .btn:only-child{grid-column:2}.three-tabs{grid-template-columns:repeat(3,1fr)}.random-card span{color:#68756e;font-size:14px}
+.change-section{margin:22px 0 28px}.change-heading{display:flex;gap:12px;align-items:center;margin-bottom:12px}.change-heading>span{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#eef4e8;color:#56733c;font-weight:800}.change-heading div{display:flex;flex-direction:column}.change-heading b{font-size:17px}.change-heading small{margin-top:3px;color:#777}.change-card{border:1px solid #e5e1d8;border-radius:16px;padding:15px;margin-top:10px;background:#fffdf8;box-shadow:0 5px 18px rgba(75,62,42,.05)}.change-card-title{display:flex;justify-content:space-between;align-items:center}.change-card-title span{font-size:12px;padding:5px 9px;border-radius:999px;background:#edf5e9;color:#56733c}.amount-flow{display:grid;grid-template-columns:1fr 34px 1fr;align-items:center;margin:14px 0 8px}.amount-flow strong{padding:12px;border-radius:12px;background:#f5f2eb;text-align:center}.amount-flow strong:last-child{background:#eaf4e5;color:#3f6f2e}.amount-flow i{text-align:center;font-style:normal;color:#668c51;font-weight:800}.change-card p{margin:7px 0 0;color:#666;font-size:13px;line-height:1.55}.pdf-hero-space{height:185px}.pdf-page{font-family:Arial,'Noto Sans KR',sans-serif}.pdf-brand{border-bottom:2px solid #5d8761;padding-bottom:12px}.pdf-brand img{width:58px;height:58px;object-fit:contain}.pdf-page h2{font-size:25px;margin:22px 0 0}.pdf-page h3{color:#3d7550;font-size:16px;margin:0 0 10px}.meal-recipe-table,.nutrition-pdf-table{font-size:10px}.meal-recipe-table th,.meal-recipe-table td,.nutrition-pdf-table th,.nutrition-pdf-table td{padding:8px 7px;vertical-align:top}.three-tabs{grid-template-columns:repeat(3,1fr)}
 
 /* v7 integrated polish: calm clinical readability and explicit data state */
 :root{--ink:#203129;--muted:#6a766f;--g:#6f9461;--gd:#355f3d;--gs:#edf5e9;--line:#e3e8e2;--paper:#fbfaf6;--danger:#a85f35}
@@ -16,9 +16,9 @@ body{font-family:Pretendard,'Noto Sans KR',-apple-system,BlinkMacSystemFont,'Seg
 .header{height:66px;padding:0 18px;border-bottom:1px solid rgba(45,75,56,.08)}.logo-button img{width:64px;height:42px;object-fit:contain}
 .btn{min-height:54px;border-radius:16px;font-size:16px;font-weight:800;box-shadow:0 8px 22px rgba(64,102,67,.14)}.btn-secondary{box-shadow:none}
 .footer{padding:14px 20px calc(14px + env(safe-area-inset-bottom));border-top:1px solid rgba(45,75,56,.08)}
-.eyebrow{font-size:12px;font-weight:900;letter-spacing:.08em;color:var(--gd);text-transform:uppercase}.source-pill span{width:7px;height:7px;border-radius:50%;background:#9aa39d}.source-pill.neon span{background:#50a46a}.source-pill.csv span{background:#c29b4b}.source-pill.offline span{background:#b46b62}
+.eyebrow{font-size:12px;font-weight:900;letter-spacing:.08em;color:var(--gd);text-transform:uppercase}
 .tabs{padding:4px;background:#f1f4f0;border-radius:15px}.tab{min-height:42px;border-radius:12px;font-size:13px}.tab.active{background:#fff;box-shadow:0 3px 12px rgba(40,60,47,.08)}
-.search{height:54px;border-radius:16px;border:1px solid #dfe6df;background:#fff}.search input{font-size:15px}.search-results button{min-height:68px;border-radius:17px;padding:10px 12px;transition:transform .16s,border-color .16s}.search-results button:active{transform:scale(.985)}.nutrient-row b{font-size:15px}.nutrient-row small{font-size:11px;margin-top:5px}.nutrient-value strong{font-size:20px}.nutrient-value em{font-size:10px;font-style:normal;font-weight:800}
+.search{height:54px;border-radius:16px;border:1px solid #dfe6df;background:#fff}.search input{font-size:15px}
 .warning-box{border-radius:16px;background:#fff6ed;color:#704923;border:1px solid #f1ddc9}.change-card{box-shadow:0 8px 24px rgba(58,69,61,.06)}
 .loading-message{min-height:44px;text-align:center;line-height:1.55;color:var(--muted)}
 @media(max-width:430px){
@@ -29,8 +29,6 @@ body{font-family:Pretendard,'Noto Sans KR',-apple-system,BlinkMacSystemFont,'Seg
   .sub{font-size:14px;margin-top:8px}
   .visual-card{min-height:180px;margin:16px 0 12px;padding:10px}
   .visual-card img{max-height:180px}
-  .hero img{height:180px}
-  .food-hero img{height:130px}
   .dialysis-cards{margin-top:16px;gap:8px}
   .dialysis-card{padding:12px;column-gap:10px}
   .medical-icon{width:44px;height:44px;font-size:14px}
@@ -49,7 +47,7 @@ body{font-family:Pretendard,'Noto Sans KR',-apple-system,BlinkMacSystemFont,'Seg
 
 /* v8 membership and personal library */
 .phone{position:relative}.screen{animation:screen-in .28s cubic-bezier(.2,.8,.2,1)}
-@keyframes screen-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}.auth-hero>span{display:inline-grid;place-items:center;width:54px;height:54px;border-radius:18px;background:var(--gs);color:var(--gd);font-weight:900}.form-error{color:#a44c43;font-size:12px}.auth-switch{text-align:center;color:var(--muted);font-size:13px}.auth-switch button{border:0;background:transparent;color:var(--gd);font-weight:900}.check-row{display:flex!important;gap:10px;align-items:flex-start}.check-row input{width:20px;height:20px;accent-color:var(--g)}.check-row span{display:grid;gap:3px}.check-row small{color:var(--muted)}.action-grid.four button{min-height:68px}
+@keyframes screen-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}.form-error{color:#a44c43;font-size:12px}.auth-switch{text-align:center;color:var(--muted);font-size:13px}.auth-switch button{border:0;background:transparent;color:var(--gd);font-weight:900}.check-row{display:flex!important;gap:10px;align-items:flex-start}.check-row input{width:20px;height:20px;accent-color:var(--g)}.check-row span{display:grid;gap:3px}.check-row small{color:var(--muted)}
 .bottom-nav{position:sticky;bottom:-34px;margin:30px -24px -34px;padding:8px 10px calc(10px + env(safe-area-inset-bottom));display:grid;grid-template-columns:repeat(5,1fr);background:rgba(255,255,255,.96);backdrop-filter:blur(18px);border-top:1px solid var(--line);z-index:8}.bottom-nav button{border:0;background:transparent;display:grid;place-items:center;gap:3px;color:#849088;min-height:48px}.bottom-nav i{font-size:20px;font-style:normal}.bottom-nav span{font-size:10px;font-weight:800}.bottom-nav button.active{color:var(--gd)}
 .profile-summary{display:grid;grid-template-columns:56px 1fr auto;gap:12px;align-items:center;padding:22px 0}.avatar{width:56px;height:56px;border-radius:20px;background:linear-gradient(135deg,var(--gd),var(--g));color:#fff;display:grid;place-items:center;font-size:22px;font-weight:900}.profile-summary h2,.profile-summary p{margin:0}.profile-summary p{font-size:12px;color:var(--muted);margin-top:4px}.profile-summary button{border:1px solid var(--line);background:#fff;border-radius:12px;padding:8px 12px;font-weight:800}.metric-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}.metric-grid div{background:var(--gs);padding:16px;border-radius:17px;display:grid;gap:4px}.metric-grid b{font-size:17px}.metric-grid span{font-size:11px;color:var(--muted)}.menu-list{border:1px solid var(--line);border-radius:18px;overflow:hidden;background:#fff}.menu-list button{width:100%;display:flex;justify-content:space-between;border:0;border-bottom:1px solid var(--line);background:#fff;padding:16px;font-size:14px;font-weight:750}.menu-list button:last-child{border-bottom:0}.menu-list i{font-style:normal;color:var(--muted)}.logout{width:100%;border:0;background:transparent;color:#9b554e;padding:18px;font-weight:800}
 .saved-list{display:grid;gap:11px;margin-top:22px}.saved-list article{display:grid;grid-template-columns:58px 1fr 32px;align-items:center;border:1px solid var(--line);border-radius:17px;padding:10px;background:#fff}.saved-thumb{height:58px;border-radius:13px;background:var(--gs);display:grid;place-items:center;color:var(--gd);font-size:11px;font-weight:900}.saved-main{border:0;background:transparent;text-align:left;display:grid;gap:3px;min-width:0}.saved-main b,.saved-main span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.saved-main span,.saved-main small{font-size:10px;color:var(--muted)}.delete-mini{border:0;background:transparent;font-size:20px;color:#9aa39d}.empty-state{min-height:360px;display:grid;place-content:center;text-align:center;gap:9px}.empty-state>div{font-size:34px;color:var(--g)}.empty-state p{color:var(--muted);font-size:13px}.empty-state .btn{margin-top:10px}
@@ -62,7 +60,7 @@ body{font-family:Pretendard,'Noto Sans KR',-apple-system,BlinkMacSystemFont,'Seg
 .change-heading small{display:block;color:var(--muted);font-size:11px;margin-top:3px}
 .change-card{border:1px solid var(--line);background:#fff;border-radius:16px;padding:14px;margin-bottom:10px;opacity:0;transform:translateY(10px) scale(.98);transition:opacity .45s ease,transform .45s ease}
 .change-card.reveal-in{opacity:1;transform:none}
-.change-card.reveal-wait{opacity:.15;transform:translateY(10px) scale(.98)}
+
 .change-card-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
 .change-card-title b{font-size:13px}
 .change-card-title span{font-size:10px;color:var(--g);background:var(--gs);padding:5px 8px;border-radius:99px}
@@ -77,8 +75,8 @@ body{font-family:Pretendard,'Noto Sans KR',-apple-system,BlinkMacSystemFont,'Seg
 .info-box span{font-size:12px;color:var(--muted);margin-top:5px}
 .loading-message.warn{color:#c66b19}
 .loading-hint{margin-top:10px;font-size:11px;color:var(--muted)}
-.adjust-preview-item.show{opacity:1;transform:none;background:var(--gs);color:var(--gd)}
-.adjust-preview-item b{font-weight:700}
+
+
 .recipe-note{margin:8px 0 0;font-size:12px;color:var(--g);background:var(--gs);padding:9px 11px;border-radius:11px}
 .tag-ai{margin-left:8px;font-size:9px;font-weight:700;color:#fff;background:var(--g);padding:3px 7px;border-radius:99px;vertical-align:middle}
 .recipe-loading{display:flex;align-items:center;gap:10px;padding:14px;background:var(--gs);border-radius:14px;font-size:12px;color:var(--gd);margin-top:8px}
@@ -97,18 +95,18 @@ body{font-family:Pretendard,'Noto Sans KR',-apple-system,BlinkMacSystemFont,'Seg
 .tts-row audio{width:100%}
 .ingredient-picked-row{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:12px;color:var(--muted)}
 .link-button{border:0;background:none;color:var(--g);font-weight:700;font-size:12px}
-.search-result.active,.search-results button.active{border-color:var(--g);background:var(--gs)}
+
 /* Home 화면의 텍스트 전용 검색결과 버튼(이미지 칸 없음)을 위한 레이아웃 보정 */
-.search-results button{grid-template-columns:1fr 20px}
-.search-results button span{display:grid;gap:3px;min-width:0}
-.search-results button b,.search-results button small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.search-results button small{color:var(--muted);font-size:11px}
+
+
+
+
 .form-error{color:#a9362c;font-size:12px;margin:0}
 .field-hint{font-size:11px;color:var(--muted);font-weight:400;margin-top:-2px}
 .field-hint.warn{color:#c66b19}
-.day-plan-entry b{display:block;font-size:13px;color:var(--gd)}
-.day-plan-entry small{display:block;margin-top:4px;font-size:11px;color:var(--muted)}
-.day-plan-entry i{color:var(--g);font-style:normal;font-size:18px}
+
+
+
 
 /* ── 단계 인디케이터 (StepHeader) ── */
 .step-header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:22px}
@@ -122,12 +120,12 @@ body{font-family:Pretendard,'Noto Sans KR',-apple-system,BlinkMacSystemFont,'Seg
 .step-count{flex:0 0 auto;border:1px solid var(--line);border-radius:999px;padding:5px 11px;font-size:11px;color:var(--muted);background:#fff}
 
 /* ── 영양 게이지 (Nutrients, 목업 "미만/적절/초과" 3구간 바) ── */
-.gauge-list{display:grid;gap:14px;margin-top:20px}
-.gauge-head>div{flex:1;min-width:0}
-.gauge-head b{font-size:17px;font-weight:800}
-.gauge-head b small{font-size:11px;font-weight:600;color:var(--muted)}
-.gauge-badge.ok{color:var(--gd);background:var(--gs)}
-.gauge-badge.warn{color:#a9362c;background:#fdeceb}
+
+
+
+
+
+
 
 /* ── 음식 한 줄 카드 (MealListRow) ── */
 .meal-list{display:grid;gap:9px;margin:18px 0}
@@ -138,11 +136,11 @@ body{font-family:Pretendard,'Noto Sans KR',-apple-system,BlinkMacSystemFont,'Seg
 .meal-row:hover{border-color:#b8c39e}
 
 /* ── 온보딩 인트로/미리보기 (사진 대신) ── */
-.intro-visual{display:grid;place-items:center;gap:12px;padding:36px 20px;text-align:center}
-.intro-visual p{margin:0;color:var(--muted);font-size:13px}
+
+
 
 /* ── 레시피 상세 히어로 (사진 대신 아이콘+배지) ── */
-.recipe-hero{display:flex;flex-direction:column;align-items:center;gap:10px;padding:28px 16px;border-radius:21px;background:var(--gs);text-align:center}
+
 
 /* ── 로딩 스피너 이모지 (사진 대신) ── */
 .loader-emoji{font-size:64px;line-height:1}
@@ -178,9 +176,9 @@ body{font-size:16px}
 .tab{min-height:44px;font-size:14px}
 .search{height:52px;border-width:1px;margin-top:12px}
 .search input{font-size:16px}
-.search-results button{min-height:62px;border-width:1px}
-.search-results button b{font-size:15px}
-.search-results button small{font-size:12px}
+
+
+
 .meal-list{gap:7px;margin:12px 0}
 .meal-row{padding:13px 14px;border-width:1px}
 .meal-row-role{font-size:12px;padding:6px 9px}
@@ -194,7 +192,7 @@ body{font-size:16px}
 .steps{gap:10px}
 .steps li>span{width:28px;height:28px;font-size:13px}
 .steps p{font-size:15px;line-height:1.6;color:#36443c}
-.ingredient-list li{font-size:13px;padding:11px}
+
 .info-box,.warning-box{padding:12px;margin-top:12px}
 .info-box b,.warning-box b{font-size:15px}
 .info-box span,.warning-box span{font-size:13px;line-height:1.55}
@@ -249,24 +247,24 @@ body{font-size:16px}
 .result-box span{font-size:13px;color:var(--muted);line-height:1.6}
 
 /* ── 영양 게이지: 도넛 + 3구간 막대 (5개가 한 화면에 들어오도록 압축) ── */
-.gauge-list{display:grid;gap:8px;margin-top:12px}
-.gauge-legend-top .lo::before{background:#c3d9ec}
-.gauge-legend-top .ok::before{background:var(--g)}
-.gauge-legend-top .hi::before{background:#eda99e}
-.gauge-row.over{border-color:#eeb2a9;background:var(--overbg)}
-.gauge-row.under{border-color:#b9d3ec;background:var(--underbg)}
-.donut.ok .donut-fg{stroke:var(--g)}
-.donut.under .donut-fg{stroke:var(--under)}
-.donut.over .donut-fg{stroke:var(--over)}
-.donut.over .donut-pct{fill:var(--over)}
-.donut.under .donut-pct{fill:var(--under)}
-.gauge-name i{font-style:normal}
-.gauge-value small{font-size:12px;font-weight:700;color:var(--muted)}
-.gauge-badge.ok{color:#fff;background:var(--g)}
-.gauge-badge.over{color:#fff;background:var(--over)}
-.gauge-badge.under{color:#fff;background:var(--under)}
-.gauge-row.over .gauge-pin{border-color:var(--over)}
-.gauge-row.under .gauge-pin{border-color:var(--under)}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 .gauge-note{margin-top:12px;text-align:center;font-size:12px;color:var(--muted)}
 
 @media(max-width:430px){

@@ -54,7 +54,7 @@
 /* ── 타이포 ── */
 .phone .screen h1 { font-size: var(--fs-2xl) !important; line-height: 1.3; }
 .phone .splash-title { font-size: var(--fs-3xl) !important; }
-.phone .login-title { font-size: var(--fs-2xl) !important; }
+
 .phone .onboarding-title { font-size: var(--fs-xl) !important; }
 .phone .onboarding-title b { font-size: var(--fs-2xl); }
 .phone .analysis-title, .phone .greeting { font-size: var(--fs-2xl) !important; }
@@ -311,12 +311,8 @@
 .ask-actions button { font-size: var(--fs-sm); }
 
 /* 온보딩 단계 이미지 (public/assets/onboarding-1~5.png) */
-.onboarding-shot { margin: var(--sp-md) 0 0; }
-.onboarding-shot img {
-  display: block; width: 100%; height: auto;
-  border: 1px solid var(--line); border-radius: var(--rd-md);
-  background: #fff;
-}
+
+
 
 /* PDF 문서 폭을 넓혀 세로를 줄인다 (A4 비율 1.41에 가깝게 → 축소율이 줄어 글자가 커진다) */
 .pdf-page { min-width: 860px; }
