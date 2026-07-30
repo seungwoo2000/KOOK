@@ -152,7 +152,6 @@ body { background: var(--paper); }
 .lever-row b { display: block; font-size: 14px; }
 .lever-row small { display: block; margin-top: 4px; font-size: 12px; color: var(--muted); line-height: 1.5; }
 .lever-row i { font-style: normal; color: var(--g); font-size: 18px; }
-.adjust-hint { margin-top: 12px; text-align: center; font-size: 12px; color: var(--muted); }
 .final-plate {
   margin: 14px 0; height: 170px; border-radius: 18px; background: #f6f1e6;
   display: grid; place-items: center; font-size: 30px; letter-spacing: 6px;
@@ -210,7 +209,6 @@ body { background: var(--paper); }
 /* ── 홈 ── */
 .greeting { font-size: 29px; font-weight: 900; margin: 2px 0 6px; }
 .greeting b { color: var(--gd); }
-.home-source { margin-top: 10px; opacity: .75; }
 .quick-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 14px 0 4px; }
 .quick-card {
   background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 16px 8px;
@@ -267,7 +265,6 @@ body { background: var(--paper); }
 }
 .meal-list.numbered .meal-row-name { font-size: 18px; font-weight: 700; }
 .meal-row-sub { font-size: 12px; color: var(--muted); }
-.two-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 4px 0 16px; }
 .two-actions button {
   display: flex; align-items: center; justify-content: center; gap: 8px;
   border: 1px solid var(--line); background: #fff; border-radius: 14px;
@@ -281,11 +278,6 @@ body { background: var(--paper); }
 .warning-box.alert {
   display: grid; grid-template-columns: 30px 1fr; column-gap: 12px;
   background: var(--overbg); border-color: #f3cdc7; border-radius: 16px; padding: 16px;
-}
-.alert-mark {
-  grid-row: 1 / 3; width: 30px; height: 30px; border-radius: 50%;
-  background: var(--over); color: #fff; display: grid; place-items: center;
-  font-style: normal; font-weight: 900;
 }
 .warning-box.alert b { color: var(--over); font-size: 15px; }
 .warning-box.alert span { color: var(--muted); margin-top: 6px; }
@@ -396,17 +388,8 @@ body { background: var(--paper); }
 
 /* 최종 영양소: 재구성 전 | 후 비교표 */
 .ba-table { border: 1px solid var(--line); border-radius: 14px; overflow: hidden; background: #fff; }
-.ba-head, .ba-row {
-  display: grid; grid-template-columns: 1.05fr 1fr 1.15fr; align-items: center; gap: 6px;
-  padding: 12px 13px;
-}
-.ba-head { background: #f4f2ec; font-size: 12px; font-weight: 800; color: var(--muted); }
 .ba-head span:not(:first-child), .ba-row > span:not(:first-child) { text-align: right; }
-.ba-row { border-top: 1px solid var(--line); }
-.ba-name { font-size: 13px; font-weight: 700; }
-.ba-before { font-size: 15px; font-weight: 700; color: var(--muted); text-decoration: line-through; }
 .ba-before small, .ba-after small { font-size: 11px; font-weight: 600; }
-.ba-after { font-size: 17px; font-weight: 900; color: var(--gd); }
 .ba-after.over { color: var(--over); }
 .ba-after.under { color: var(--under); }
 .ba-after em {
@@ -427,9 +410,6 @@ body { background: var(--paper); }
 .final-tabs svg { width: 22px; height: 22px; color: var(--gd); }
 
 @media (max-width: 430px) {
-  .ba-head, .ba-row { padding: 11px 10px; grid-template-columns: 1fr .9fr 1.05fr; }
-  .ba-after { font-size: 15px; }
-  .ba-before { font-size: 13px; }
   .rename-before, .rename-after { font-size: 13px; }
   .final-tabs button { font-size: 11px; min-height: 68px; }
   .splash-logo { width: 170px; }
@@ -442,8 +422,7 @@ body { background: var(--paper); }
   .onboarding-title b { font-size: 25px; }
   .footer-actions.three button { font-size: 12px; gap: 5px; }
   .meal-list.numbered .meal-row { padding: 16px 14px; }
-  .meal-list.numbered .meal-row-role { width: 46px; height: 46px; }
-}
+  .meal-list.numbered .meal-row-role { width: 46px; height: 46px; }}
 
 /* ============================================================================
    v14 — 요청 반영
@@ -526,7 +505,6 @@ body { background: var(--paper); }
 .ba-head span + span, .ba-row > span + span { border-left: 1px solid var(--line); }
 .ba-head span:nth-child(2), .ba-row > span:nth-child(2) { background: #f7f5ef; }
 .ba-head span:nth-child(3), .ba-row > span:nth-child(3) { background: #f0f6ec; }
-.ba-head, .ba-row { padding: 0; }
 .ba-head span, .ba-row > span { padding: 12px 10px; min-height: 46px; display: flex;
   flex-direction: column; justify-content: center; }
 .ba-head span:not(:first-child), .ba-row > span:not(:first-child) { align-items: flex-end; }
@@ -537,8 +515,7 @@ body { background: var(--paper); }
   .nutri-card { grid-template-columns: 32px 1fr auto; gap: 9px; padding: 12px; }
   .nutri-value { font-size: 19px; }
   .nutri-badge { font-size: 12px; padding: 7px 11px; }
-  .nutri-target { font-size: 11px; }
-}
+  .nutri-target { font-size: 11px; }}
 
 /* ============================================================================
    v15 — 분석 상태 구분 / 전·후 화살표 표기 / 레시피 영양성분 / 하단 탭 고정
@@ -612,8 +589,7 @@ body { background: var(--paper); }
   .ba-from, .ba-to { font-size: 21px; }
   .ba-arrow svg { width: 34px; }
   .dish-nutri b { font-size: 12px; }
-  .dish-nutri small { font-size: 10px; }
-}
+  .dish-nutri small { font-size: 10px; }}
 
 /* 식단 기록 팝업 — 날짜 + 끼니 선택 */
 .modal.slot .slot-date { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 18px; padding: 12px 14px; border: 1.5px solid #dfe6df; border-radius: 13px; }

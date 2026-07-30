@@ -8,10 +8,9 @@ app_core_FOOK.py — 투석 한끼 앱 코어 (생성 → resample → 레버조
   3) 랜덤        : 자연스러운 한끼 생성
 공통: 생성 → 레버(투석 5영양 조정) → 5영양 통과할 때까지 resample → 완성 한끼 반환.
 
-실행 (foodbert):
-  conda activate foodbert
+실행:
+  conda activate kook_env
   set TF_USE_LEGACY_KERAS=1
-  cd /d E:\\final
   python app_core_FOOK.py
 """
 import os, sys, copy
@@ -22,14 +21,14 @@ from collections import Counter, defaultdict
 import numpy as np
 import pandas as pd
 
-# [배포판 패치] 절대경로(E:\final) 대신 이 파일 위치 기준 상대경로 → 어느 PC/폴더에서도 실행됨.
+# 절대경로 대신 이 파일 위치 기준 상대경로를 쓴다 — 어느 PC·폴더에 두어도 그대로 실행된다.
 _HERE = os.path.dirname(os.path.abspath(__file__))
 CODE = os.path.join(_HERE, 'Diet-Generation-As-Sequence-master', 'Diet-Generation-As-Sequence-master', 'Code')
 DATA = os.path.join(_HERE, 'data')
 # 체크포인트: RL(레버 조정량 보상) 파인튜닝본. imit=0.02가 스윕 최적(lr 5e-5, 300에폭, 앵커인지 레버 기준 학습).
 #   모방 대비 n=2000: 앵커보존 .649->.676, 전체보존 .279->.344, 5영양 첫시도통과 52->71%, 다양성 633->611(-3%).
 #   imit을 더 낮추면(0) 5영양 82%까지 오르나 다양성 493(-22%)+종료토큰 붕괴 -> 나쁜 거래.
-#   되돌리려면 'results_FOOK','checkpoints'(순수 모방)로.
+#   순수 모방 체크포인트를 쓰려면 'results_FOOK','checkpoints' 를 지정한다.
 CKPT = os.path.join(CODE, 'results_sweep_FOOK', 'i002')
 SPECIAL = {0, 825, 826}
 sys.path.insert(0, CODE)
@@ -150,11 +149,11 @@ KIMCHI_MAIN = {m for m, igs in menu_ings.items()
 # 뼈육수가 본체라 육수를 빼면 남는 게 없는 메뉴(꼬리곰탕=당면만) + 소고기맑은국으로 중복되는
 # 사골곰국·사골곰탕(설렁탕 하나로 통합)을 제외. 나머지 뼈육수 메뉴는 육수→맹물 + 이름 변경으로 살린다.
 BONE_EXCLUDE = {'꼬리곰탕', '사골곰국', '사골곰탕'}
-# 콩가루(2026-07-22, 사용자 요청 "콩가루도 안써야지") — 이 데이터에서 콩가루는 전부 국물 걸쭉이
+# 콩가루("콩가루도 안써야지") — 이 데이터에서 콩가루는 전부 국물 걸쭉이
 # 용도(콩가루배춧국·우무냉국·콩가루배추국)라 대체할 수도 없고(제형이 안 맞음, 앞서 대두→두부 매핑
 # 제거 사유와 동일) 빼는 것도 애매해 아예 메뉴 자체를 생성 선택지에서 제외.
 GARU_EXCLUDE = {m for m, ings in F.NUT[5].items() if any('콩가루' in ing for ing, _ in ings)}
-# 소스/양념장류 + 나물/무침류 + 기타 중복 메뉴(2026-07-22, 전수조사) — 한 메뉴 이름이 다른 메뉴
+# 소스/양념장류 + 나물/무침류 + 기타 중복 메뉴 — 한 메뉴 이름이 다른 메뉴
 # 이름의 접두어인 모든 쌍을 스캔해 레시피 대조. 같은 요리의 재료·비율만 다른 중복 기록으로 확인된
 # 것들만 선정(완전히 다른 요리로 판단된 모닝빵/모닝빵샌드위치 등은 제외 안 함). 짧은/단순한 이름을
 # 표준으로 남기고 나머지를 생성 후보에서 제외(데이터 삭제 아님 — 대부분 학습모델 핵심 어휘라 행
@@ -179,7 +178,7 @@ DUP_MENU_EXCLUDE = {
     '삼색수제비국',          # → 삼색수제비
     '액상요구르트',          # → 요구르트 (재료 동일 '요구르트, 액상', 양만 75g/70g)
     '등심돈까스소스',        # → 돈까스소스 (재료 구성·양 사실상 동일)
-    # 참깨·들깨·견과류를 재료에서 제거(2026-07-24)한 뒤 대조해보니, 아래는 사실상 같은 레시피의
+    # 참깨·들깨·견과류를 재료에서 제거한 뒤 대조해보니, 아래는 사실상 같은 레시피의
     # 중복 기록이었음(육수용 멸치·다시마 차이는 어차피 맹물로 치환돼 무관, 남는 차이가 반올림 수준
     # 이거나 조리 시점 표기 차이(생것/삶은것 등)뿐) → 더 단순한 이름 쪽을 표준으로 남김.
     '고사리들깨나물',        # → 고사리나물 (들깨·참깨 빼면 재료·양 완전 동일)
@@ -206,7 +205,7 @@ print(f'군 메뉴 {len(gun_names)}개 추가, 김치주재료 {len(KIMCHI_MAIN)
       f'콩가루 {len(GARU_EXCLUDE)}개 제외 (총 선택가능 {len(ALL_MENU_NAMES)}개)')
 
 
-# ── 메뉴별 정체성(주) 재료 — 한 끼 안에서 재료 겹침 판정용 (2026-07-22) ──────────
+# ── 메뉴별 정체성(주) 재료 — 한 끼 안에서 재료 겹침 판정용 ──────────
 # lever_adjust의 is_identity_ingredient와 같은 개념: (1) 메뉴명에 든 재료(오징어볶음의 오징어)
 # 우선, 없으면 (2) 물·조미료를 뺀 건더기 중 양이 가장 많은 재료(어묵볶음의 어묵).
 def _menu_identity_ing(menu):
@@ -248,7 +247,7 @@ def _has_ingredient_clash(menus):
     return False
 
 
-# 자연나트륨군(어패류·해조류) 끼니당 개수 제한 (2026-07-22, 나트륨 예산이월로도 못 잡는 '트리플 겹침' 대응).
+# 자연나트륨군(어패류·해조류) 끼니당 개수 제한 (나트륨 예산이월로도 못 잡는 '트리플 겹침' 대응).
 # 실측(1095끼): 0개4.4%·1개52.9%·2개36.3%(어묵볶음+미역줄기나물 등 흔한 정상조합)·3개+6.4%(문제구간).
 # 1개로 제한하면 42.7%가 거부돼 과함 → 2개까지 허용, 3개부터 거부.
 HIGH_NA_GROUPS = {'어패류 및 그 제품', '해조류'}
@@ -271,7 +270,7 @@ def _has_seafood_overload(menus):
     return sum(1 for m in menus if m in HIGH_NA_MENUS) > HIGH_NA_MAX
 
 
-# 고인비율군(가공식품·유제품·견과류) 끼니당 개수 제한 (2026-07-22, 나트륨과 같은 방식).
+# 고인비율군(가공식품·유제품·견과류) 끼니당 개수 제한 (나트륨과 같은 방식).
 # 실측(1095끼): 0개35.2%·1개46.8%(정상다수)·2개16.9%·3개+1.2%(진짜꼬리, 채소/단백질과 달리 절벽 뚜렷).
 # 채소류(3개+99.3%)·단백질군(2개+92%)은 정상범위라 제한 안 함 — 이 군만 예외적으로 고농도 겹침이 드묾.
 HIGH_P_GROUPS = {'조리가공식품류', '우유 및 그 제품', '견과류 및 종실류'}
@@ -457,19 +456,6 @@ def make_meal(menu=None, ingredient=None, W=60, tries=48, temp=0.8, bounds=None,
         warns.append(na_w)
     warn = ' '.join(warns)
     return best, note + f' [{tries}회 완전통과 실패 → 최선 {best_score}/5]' + ('\n  ⚠ ' + warn if warn else ''), b, anchor, warn
-
-
-def show(cand, note, b):
-    menus, inst, after, ok, _before = cand
-    # 최종 메뉴(레버가 김치교체/기름추가 반영)
-    final_menus = list(dict.fromkeys(i['menu'] for i in inst))
-    print(f'  {note}' if note else '', end='')
-    print(f"\n  완성 한끼: {' · '.join(final_menus)}")
-    print(f"  영양(끼니): 열량 {after['E']:.0f}(목표{b['Elo']:.0f}~{b['Ehi']:.0f}) "
-          f"단백 {after['protein']:.0f}({b['Plo']:.0f}~{b['Phi']:.0f}) "
-          f"K {after['K']:.0f}(<{b['Kmax']:.0f}) P {after['P']:.0f}(<{b['Pmax']:.0f}) "
-          f"Na(조미료) {after['Na_season']:.0f}(<={b['Namax']:.0f}, 총{after['Na']:.0f})")
-    print(f"  5영양 통과: {'O 전부충족' if ok else 'X (일부 미달)'}")
 
 
 def _changes(menus, inst):

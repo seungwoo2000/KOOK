@@ -1,19 +1,18 @@
 # -*- coding: utf-8 -*-
 """
-server_FOOK.py — FOOK 통합 백엔드 (FastAPI)
+server_FOOK.py — KOOK 백엔드 (FastAPI)
 
-두 인수인계본을 병합한 버전입니다.
-  - 회원가입/로그인/세션/프로필/식단기록/즐겨찾기/PDF보관함/장바구니 → Neon(PostgreSQL) DB
-    (기존 "FOOK-total-integrated"의 database.py / auth_utils.py / SQL 스키마 그대로 사용)
-  - 식단 생성(/generate, /generate_day), 조리법 편집(/recipe), 음성 변환(/tts),
-    메뉴/재료 목록(/menus, /ingredients) → 실제 KLUE-BERT + REINFORCE 강화학습 엔진
-    (팀원이 새로 전달한 "FOOK_handoff"의 app_core_FOOK.py / recipe_editor_FOOK.py 그대로 사용)
+두 갈래의 기능을 한 서버에서 제공한다.
+  - 회원 기능: 회원가입/로그인/세션/프로필/식단기록/즐겨찾기/PDF보관함/장바구니
+    → Neon(PostgreSQL). database.py / auth_utils.py / sql 스키마를 쓴다.
+  - AI 기능: 식단 생성(/generate, /generate_day), 조리법 편집(/recipe),
+    음성 변환(/tts), 메뉴·재료 목록(/menus, /ingredients)
+    → KLUE-BERT + REINFORCE 강화학습 엔진. app_core_FOOK / recipe_editor_FOOK 를 쓴다.
 
-즉 이전 통합본의 "/generate가 Neon 템플릿에서 무작위로 하나 뽑아오는 임시 스텁"이었던 부분을,
-실제로 동작하는 AI 생성 엔진으로 교체했습니다. DB 쪽 회원 기능은 그대로 유지됩니다.
+두 갈래는 서로 독립적이라 한쪽 의존성이 없어도 다른 쪽은 정상 동작한다.
 
 실행:
-  conda activate foodbert   (또는 requirements.txt로 venv 구성)
+  conda activate kook_env   (또는 requirements.txt로 venv 구성)
   set TF_USE_LEGACY_KERAS=1        (mac/linux는 export)
   python -m uvicorn server_FOOK:app --host 0.0.0.0 --port 8000
 
@@ -41,7 +40,7 @@ os.environ.setdefault('TF_USE_LEGACY_KERAS', '1')
 os.environ.setdefault('TF_CPP_MIN_LOG_LEVEL', '3')
 # app_core_FOOK / FOOK_adjust_levers / recipe_editor_FOOK 모두 자기 파일 위치 기준
 # 상대경로로 data/, Diet-Generation-.../, Exploiting-.../ 를 읽으므로, 어디서 uvicorn을
-# 실행하든 이 파일이 있는 backend/ 를 작업 디렉터리로 고정한다. (handoff 배포판 패치와 동일)
+# 실행하든 이 파일이 있는 backend/ 를 작업 디렉터리로 고정한다.
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 import app_core_FOOK as core
 
@@ -214,7 +213,7 @@ class CartReq(BaseModel):
 
 
 # user_profiles.birthdate 는 002_account_recovery.sql 에서 추가되는 컬럼이다.
-# 팀원이 마이그레이션을 안 돌린 상태로 서버를 띄워도 계정 찾기가 그냥 죽지 않도록,
+# 마이그레이션을 돌리지 않은 DB로 서버를 띄워도 계정 찾기가 죽지 않도록,
 # 계정 관련 요청이 처음 들어올 때 한 번만 ADD COLUMN IF NOT EXISTS 를 실행해 둔다.
 _birthdate_ready = False
 

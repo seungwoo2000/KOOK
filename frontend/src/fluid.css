@@ -39,11 +39,9 @@
 }
 @media (max-width: 470px) {
   .page { padding: 0; display: block; background: var(--paper); }
-  .phone { max-width: none; height: 100dvh; border-radius: 0; box-shadow: none; }
-}
+  .phone { max-width: none; height: 100dvh; border-radius: 0; box-shadow: none; }}
 @media (min-width: 471px) {
-  .page { background: #f0eee7; }
-}
+  .page { background: #f0eee7; }}
 
 /* ── 본문 여백 · 헤더 · 푸터 ── */
 .screen { padding: var(--sp-md) var(--sp-lg) var(--sp-lg); }
@@ -181,8 +179,7 @@
 }
 @media (max-height: 560px) {
   .phone .screen h1 { font-size: var(--fs-xl) !important; }
-  .splash-logo { display: none; }
-}
+  .splash-logo { display: none; }}
 
 /* ── 컨테이너 쿼리 미지원 브라우저 폴백 (구형 기기) ── */
 @supports not (container-type: inline-size) {
@@ -206,8 +203,7 @@
 }
 @keyframes recipe-open {
   from { opacity: 0; transform: translateY(-6px); }
-  to { opacity: 1; transform: none; }
-}
+  to { opacity: 1; transform: none; }}
 .recipe-inline .section-title:first-of-type { margin-top: 0; }
 /* 보조 버튼(이전으로 등) — mockup.css의 .btn{background:var(--gd)}가 styles.css의
    .btn-secondary를 덮어써서 '초록 배경 + 초록 글자'가 되어 글자가 안 보였다.
@@ -239,7 +235,6 @@
 .meal-recipe-table, .nutrition-pdf-table { font-size: 9px; }
 .meal-recipe-table th, .meal-recipe-table td { padding: 5px 6px; line-height: 1.45; }
 .meal-recipe-table li { margin-bottom: 1px; }
-.pdf-notice { margin-top: 10px; }
 
 /* 표 머리행 · 첫 열을 다른 배경으로 구분 */
 .nutrition-pdf-table thead th,
@@ -401,8 +396,7 @@
 }
 @supports not (width: 100cqh) {
   /* 컨테이너 크기 쿼리 미지원 브라우저: 확대 없이 폭에 맞춘다 */
-  .splash-frame { width: 100%; }
-}
+  .splash-frame { width: 100%; }}
 
 /* 그림 속 버튼 위 투명 버튼 */
 .splash-hit {

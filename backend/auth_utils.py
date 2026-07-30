@@ -1,5 +1,5 @@
 from __future__ import annotations
-import base64, hashlib, hmac, os, secrets
+import base64, hashlib, hmac, secrets
 from datetime import datetime, timedelta, timezone
 from sqlalchemy import text
 

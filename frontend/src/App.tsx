@@ -64,7 +64,6 @@ const initialProfile: Profile = {
 function ageFromBirthdate(birthdate: string): number | null {
   const m = birthdate.match(/^(\d{4})-(\d{2})-(\d{2})$/);
   if (!m) return null;
-  const [, y, mo, d] = m.map(Number) as unknown as number[];
   const b = new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
   if (isNaN(b.getTime())) return null;
   const today = new Date();
@@ -639,8 +638,7 @@ function parseChange(line: string): ParsedChange {
   return { kind: "other", menu: "", raw: line };
 }
 
-// 어느 화면에서 렌더 오류가 나도 흰 화면이 되지 않도록 막는다.
-// (예전에 '빈 화면'이 보이던 상황에서 원인을 바로 알 수 있게 메시지도 띄운다)
+// 어느 화면에서 렌더 오류가 나도 흰 화면이 되지 않도록 막고, 원인을 바로 알 수 있게 메시지를 띄운다.
 class ErrorBoundary extends Component<
   { children: any },
   { error: Error | null }
@@ -678,8 +676,7 @@ class ErrorBoundary extends Component<
 
 function App() {
   // 앱에 들어오면 '항상' 소개 페이지부터 보여주고, 그 다음 로그인 화면으로 간다.
-  // 예전엔 한 번 본 사람은 건너뛰도록 localStorage 플래그를 봤는데, 그 기록이 남아 있으면
-  // 링크를 열자마자 검색 화면이 떠버려서(소개도 로그인도 안 보임) 그 분기를 없앴다.
+  // 본 적 있는 사람을 건너뛰게 하면, 링크를 열자마자 검색 화면이 떠서 소개도 로그인도 안 보인다.
   const firstRoute = "/onboarding";
   // 무료 호스팅 백엔드는 한동안 요청이 없으면 잠든다. 사용자가 소개 화면을
   // 넘기는 동안 미리 깨워두면, 회원가입/로그인 차례에는 이미 준비된 상태가 된다.
@@ -877,13 +874,6 @@ function Button({
     </button>
   );
 }
-function Trust() {
-  return (
-    <div className="trust">
-      대한신장학회의 혈액투석 환자 영양관리 자료를 참고하여 설계했어요.
-    </div>
-  );
-}
 
 // 온보딩 5단계. [번호, 제목, 설명, 미리보기 종류]
 const slides = [
@@ -1060,16 +1050,6 @@ const ONBOARDING_IMAGE: Record<string, string> = {
   adjust: "/assets/onboarding-4.png",
   final: "/assets/onboarding-5.png",
 };
-function OnboardingShot({ type, children }: { type: string; children: any }) {
-  const src = ONBOARDING_IMAGE[type];
-  const [failed, setFailed] = useState(false);
-  if (!src || failed) return children;
-  return (
-    <figure className="onboarding-shot">
-      <img src={src} alt="" onError={() => setFailed(true)} />
-    </figure>
-  );
-}
 function OnboardingVisual({ type }: { type: string }) {
   if (type === "search")
     return (
@@ -2581,16 +2561,6 @@ function Comparison() {
   const changes: string[] = apiResult?.changes || [];
   const parsed = changes.map(parseChange);
   const hasReal = changes.length > 0;
-  const speech = hasReal
-    ? `판정에 따라 레시피를 재구성했습니다. ${parsed
-        .slice(0, 5)
-        .map((c) =>
-          c.kind === "removed"
-            ? `${c.menu} 제외`
-            : `${c.menu}, ${c.before}에서 ${c.after}로 변경`,
-        )
-        .join(". ")}.`
-    : "이번 식단은 별도 조정이 없었습니다. 생성된 조합이 처음부터 영양 기준을 만족했습니다.";
   // 음식별로 묶는다. 서버 changes의 메뉴명은 '교체 전' 이름일 수 있어서(예: 배추김치 →
   // 저염물김치 교체), 교체 후 이름(c.after)으로도 매칭해야 카드가 비지 않는다.
   const perMenu = plan.menus.map((menu) => {
@@ -3066,10 +3036,6 @@ function RecipeBody({ menuName }: { menuName: string }) {
 
   const displaySteps: string[] =
     steps ?? (m?.steps?.length ? toSteps(m.steps) : []);
-  const recipeSpeech = [
-    `${menuName} 조리 순서입니다.`,
-    ...displaySteps.map((s, i) => `${i + 1}번. ${s}`),
-  ].join(" ");
   // 서버 데이터도 로컬 데이터도 없는 메뉴(주소로 직접 들어온 경우 등)
   const noData =
     ingredients.length === 0 && displaySteps.length === 0 && !loadingRecipe;
