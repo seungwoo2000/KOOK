@@ -6,7 +6,15 @@
 
 <div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:14301c,50:2F5836,100:7cb342&height=220&section=header&text=🍚%20FOOK&fontSize=64&fontColor=ffffff&fontAlignY=40&desc=혈액투석%20환자%20맞춤형%20AI%20식단%20관리%20솔루션&descAlignY=62&descColor=d9f0dd&animation=fadeIn" alt="header" width="100%"/>
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:14301c,50:2F5836,100:7cb342&height=200&section=header&text=&fontSize=0&animation=fadeIn" alt="" width="100%"/>
+
+<img src="frontend/public/assets/fook-logo.png" alt="FOOK 로고" width="190"/>
+
+### 혈액투석 환자 맞춤형 AI 식단 관리 솔루션
+
+<br/>
+
+[![배포된 서비스](https://img.shields.io/badge/🔗_서비스_바로가기-kook--omega.vercel.app-2F5836?style=for-the-badge)](https://kook-omega.vercel.app)
 
 <br/>
 
@@ -23,13 +31,23 @@
 > **투석 환자의 개인별 영양 기준을 세우고, AI가 한 끼를 만들고, 기준을 넘으면 스스로 재조정하는 식단 서비스**
 > 메뉴 조합만 추천하고 끝나지 않습니다. **재료 단위까지 양을 조절해 기준 안으로 맞춥니다.**
 
-<br/>
+<sub>⏱️ 무료 호스팅이라 15분간 접속이 없으면 서버가 잠듭니다. 첫 화면이 뜨는 데 최대 1분 걸릴 수 있습니다.</sub>
 
-### 🔗 배포된 서비스
+</div>
 
-**[https://kook-omega.vercel.app](https://kook-omega.vercel.app)**
+---
 
-<sub>무료 호스팅이라 15분간 접속이 없으면 서버가 잠듭니다. 첫 화면이 뜨는 데 최대 1분 걸릴 수 있습니다.</sub>
+## 📱 화면 미리보기
+
+<div align="center">
+
+| <img src="frontend/public/assets/onboarding-1.png" width="170"/> | <img src="frontend/public/assets/onboarding-2.png" width="170"/> | <img src="frontend/public/assets/onboarding-3.png" width="170"/> |
+|:---:|:---:|:---:|
+| **① 음식·재료 검색** <br/> <sub>먹고 싶은 걸 고르거나<br/>냉장고 재료로 시작</sub> | **② AI 한 끼 생성** <br/> <sub>밥·국·어육류·밑반찬·김치<br/>5종 구성</sub> | **③ 영양 적합성 분석** <br/> <sub>5대 영양소를<br/>개인 기준과 대조</sub> |
+
+| <img src="frontend/public/assets/onboarding-4.png" width="170"/> | <img src="frontend/public/assets/onboarding-5.png" width="170"/> | <img src="frontend/public/assets/onboarding-home.png" width="170"/> |
+|:---:|:---:|:---:|
+| **④ 자동 재조정** <br/> <sub>기준 초과 시 7단계 레버로<br/>교체·양 조절</sub> | **⑤ 레시피 · 음성 · PDF** <br/> <sub>조리법 재구성과<br/>A4 1장 문서</sub> | **홈 화면** <br/> <sub>노인 친화 UI<br/>모든 휴대폰 크기 대응</sub> |
 
 </div>
 
@@ -72,16 +90,12 @@ FOOK은 이 문제를 **"생성 → 검증 → 재조정 반복"** 구조로 풉
 
 ## 🗂️ 목차
 
-1. [서비스 플로우](#-서비스-플로우)
-2. [핵심 기술 — 영양소 재조정 레버](#-핵심-기술--영양소-재조정-레버)
-3. [주요 기능](#-주요-기능)
-4. [영양 기준 산출 방식](#-영양-기준-산출-방식)
-5. [기술 스택](#️-기술-스택)
-6. [시스템 구성](#-시스템-구성)
-7. [파일 구조](#-파일-구조)
-8. [실측 성능](#-실측-성능)
-9. [배운 점 · 성장 포인트](#-배운-점--성장-포인트)
-10. [실행 방법](#️-실행-방법)
+| | | |
+|:---|:---|:---|
+| 🔄 [서비스 플로우](#-서비스-플로우) | 🎛️ [핵심 기술 — 재조정 레버](#-핵심-기술--영양소-재조정-레버) | ✨ [주요 기능](#-주요-기능) |
+| 📐 [영양 기준 산출](#-영양-기준-산출-방식) | 🛠️ [기술 스택](#-기술-스택) | 🏗️ [시스템 구성](#-시스템-구성) |
+| 📁 [파일 구조](#-파일-구조) | 📊 [실측 성능](#-실측-성능) | 📈 [배운 점](#-배운-점--성장-포인트) |
+| ⚙️ [실행 방법](#-실행-방법) | 🚀 [배포](#-배포) | |
 
 ---
 
