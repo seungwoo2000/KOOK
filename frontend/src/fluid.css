@@ -444,7 +444,8 @@
 }
 .shot-brand img {
   display: block;
-  height: clamp(26px, 7.4cqi, 36px) !important;
+  /* 로고가 세로로 긴 비율이라 같은 높이에서도 작아 보인다 — 넉넉하게 잡는다 */
+  height: clamp(40px, 11.5cqi, 56px) !important;
   width: auto !important;
   object-fit: contain;
   mix-blend-mode: multiply;
