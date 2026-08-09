@@ -372,7 +372,7 @@
    프레임이 이미지 상자와 정확히 일치하므로, 안에 겹쳐 둔 % 좌표(시작하기 버튼)는
    배율과 무관하게 그림 위 같은 자리에 붙어 있는다. */
 .splash-frame {
-  --splash-ar: 2.108;   /* onboarding-home.png = 864 x 1821 */
+  --splash-ar: 1.777;   /* onboarding-home.png = 941 x 1672 */
   --splash-scale: .88;
   position: relative;
   flex: none;                        /* flex가 임의로 줄이지 못하게 */
@@ -397,7 +397,8 @@
 /* 그림 속 버튼 위 투명 버튼 */
 .splash-hit {
   position: absolute;
-  left: 22.3%; right: 24.3%; top: 92.8%; bottom: 2.8%;
+  /* 그림 속 버튼 픽셀 위치(x 188~690, y 1564~1653)를 이미지 크기로 나눈 값 */
+  left: 20.0%; right: 26.6%; top: 93.5%; bottom: 1.1%;
   border: 0; background: transparent; padding: 0;
   border-radius: 999px; cursor: pointer;
 }
