@@ -278,7 +278,7 @@ FOOK은 이 문제를 **"생성 → 검증 → 재조정 반복"** 구조로 풉
                │ REST API (CORS)
                ▼
 ┌─────────────────────────────┐
-│  Render — FastAPI (Docker)   │   kook-backend.onrender.com
+│  Render — FastAPI (Docker)   │   fook-backend.onrender.com
 │  ┌────────────────────────┐  │
 │  │ Seq2Seq + Attention    │  │  ← 한 끼 생성
 │  │ REINFORCE 체크포인트     │  │  ← 기준 준수 보정
