@@ -302,7 +302,7 @@ FOOK은 이 문제를 **"생성 → 검증 → 재조정 반복"** 구조로 풉
 ## 📁 파일 구조
 
 ```
-KOOK/
+FOOK/
 │
 ├── 📂 backend/                                  # AI 엔진 + API 서버
 │   ├── server_FOOK.py                           # 🚀 FastAPI 엔드포인트 (22개)
@@ -340,7 +340,7 @@ KOOK/
 │   │   └── styles.css
 │   │
 │   ├── 📂 public/assets/
-│   │   ├── kook-logo.png
+│   │   ├── fook-logo.png / fook-logo.svg        # 로고 (SVG는 폴백)
 │   │   └── onboarding-1~5.png, onboarding-home.png
 │   │
 │   ├── .env.production                          # 배포 시 백엔드 주소
@@ -391,8 +391,8 @@ KOOK/
 
 **1️⃣ 클론**
 ```bash
-git clone https://github.com/seungwoo2000/KOOK.git
-cd KOOK
+git clone https://github.com/seungwoo2000/FOOK.git
+cd FOOK
 ```
 
 **2️⃣ 백엔드 — 가상환경 및 패키지**
