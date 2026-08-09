@@ -14,7 +14,7 @@
 
 <br/>
 
-[![배포된 서비스](https://img.shields.io/badge/🔗_서비스_바로가기-kook--omega.vercel.app-2F5836?style=for-the-badge)](https://kook-omega.vercel.app)
+[![배포된 서비스](https://img.shields.io/badge/🔗_서비스_바로가기-fook--omega.vercel.app-2F5836?style=for-the-badge)](https://fook-omega.vercel.app)
 
 <br/>
 
@@ -272,7 +272,7 @@ FOOK은 이 문제를 **"생성 → 검증 → 재조정 반복"** 구조로 풉
                │ HTTPS
                ▼
 ┌─────────────────────────────┐
-│  Vercel — React 19 + Vite    │   kook-omega.vercel.app
+│  Vercel — React 19 + Vite    │   fook-omega.vercel.app
 │  화면 · PDF 생성 · 음성 안내    │
 └──────────────┬──────────────┘
                │ REST API (CORS)
@@ -448,7 +448,7 @@ npm run dev
 **비상 우회** — 배포된 백엔드가 죽었을 때 재배포 없이 다른 백엔드로 전환할 수 있습니다.
 
 ```
-https://kook-omega.vercel.app/?api=https://다른-백엔드-주소
+https://fook-omega.vercel.app/?api=https://다른-백엔드-주소
 ```
 
 원래대로 돌리려면 `?api=reset` 으로 접속합니다.
