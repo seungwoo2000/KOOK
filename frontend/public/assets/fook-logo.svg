@@ -1,11 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 480" width="512" height="480" role="img" aria-label="KOOK 로고">
-  <title>KOOK</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 480" width="512" height="480" role="img" aria-label="FOOK 로고">
+  <title>FOOK</title>
   <defs>
-    <linearGradient id="kookSoup" x1="0" y1="0" x2="0" y2="1">
+    <linearGradient id="fookSoup" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0%" stop-color="#efe4c6"/>
       <stop offset="100%" stop-color="#ded0aa"/>
     </linearGradient>
-    <linearGradient id="kookPot" x1="0" y1="0" x2="0" y2="1">
+    <linearGradient id="fookPot" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0%" stop-color="#584231"/>
       <stop offset="100%" stop-color="#3a2b1f"/>
     </linearGradient>
@@ -18,13 +18,13 @@
   </g>
 
   <!-- 뚝배기 몸통 -->
-  <path d="M196 258 h224 c0 0 -6 106 -34 132 c-20 20 -60 26 -78 26 s-58 -6 -78 -26 c-28 -26 -34 -132 -34 -132 z" fill="url(#kookPot)"/>
+  <path d="M196 258 h224 c0 0 -6 106 -34 132 c-20 20 -60 26 -78 26 s-58 -6 -78 -26 c-28 -26 -34 -132 -34 -132 z" fill="url(#fookPot)"/>
   <!-- 손잡이 -->
   <path d="M196 276 c-26 -2 -34 12 -34 26 s10 26 34 24" fill="none" stroke="#4a3728" stroke-width="18" stroke-linecap="round"/>
   <path d="M420 276 c26 -2 34 12 34 26 s-10 26 -34 24" fill="none" stroke="#4a3728" stroke-width="18" stroke-linecap="round"/>
   <!-- 국물 -->
   <ellipse cx="308" cy="260" rx="112" ry="30" fill="#4a3728"/>
-  <ellipse cx="308" cy="258" rx="100" ry="24" fill="url(#kookSoup)"/>
+  <ellipse cx="308" cy="258" rx="100" ry="24" fill="url(#fookSoup)"/>
   <!-- 두부 두 조각 -->
   <g fill="#faf6e8" stroke="#e0d3ae" stroke-width="2">
     <rect x="266" y="242" width="34" height="24" rx="4"/>
@@ -43,16 +43,16 @@
     <ellipse cx="356" cy="244" rx="11" ry="6" transform="rotate(14 356 244)"/>
   </g>
 
-  <!-- 붓글씨 '쿡' -->
+  <!-- 붓글씨 '푹' -->
   <text x="20" y="300" font-family="'Nanum Brush Script','HY견고딕','Malgun Gothic','Noto Sans KR',sans-serif"
-        font-size="250" font-weight="800" fill="#3d2e22">쿡</text>
+        font-size="250" font-weight="800" fill="#3d2e22">푹</text>
 
   <!-- 낙관(붉은 도장) -->
   <rect x="416" y="330" width="58" height="58" rx="7" fill="#c0392b"/>
   <text x="445" y="374" text-anchor="middle" font-family="'Malgun Gothic','Noto Sans KR',sans-serif"
-        font-size="34" font-weight="700" fill="#fff">쿡</text>
+        font-size="34" font-weight="700" fill="#fff">푹</text>
 
-  <!-- KOOK 워드마크 -->
+  <!-- FOOK 워드마크 -->
   <text x="256" y="458" text-anchor="middle" font-family="Georgia,'Times New Roman',serif"
-        font-size="70" font-weight="600" letter-spacing="10" fill="#3d2e22">KOOK</text>
+        font-size="70" font-weight="600" letter-spacing="10" fill="#3d2e22">FOOK</text>
 </svg>

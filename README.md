@@ -1,12 +1,12 @@
 <!--
 ████████████████████████████████████████████████████████████████████
-  seungwoo2000 · KOOK — K-디지털 트레이닝 포트폴리오 README
+  seungwoo2000 · FOOK — K-디지털 트레이닝 포트폴리오 README
 ████████████████████████████████████████████████████████████████████
 -->
 
 <div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:14301c,50:2F5836,100:7cb342&height=220&section=header&text=🍚%20KOOK&fontSize=64&fontColor=ffffff&fontAlignY=40&desc=혈액투석%20환자%20맞춤형%20AI%20식단%20관리%20솔루션&descAlignY=62&descColor=d9f0dd&animation=fadeIn" alt="header" width="100%"/>
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:14301c,50:2F5836,100:7cb342&height=220&section=header&text=🍚%20FOOK&fontSize=64&fontColor=ffffff&fontAlignY=40&desc=혈액투석%20환자%20맞춤형%20AI%20식단%20관리%20솔루션&descAlignY=62&descColor=d9f0dd&animation=fadeIn" alt="header" width="100%"/>
 
 <br/>
 
@@ -52,15 +52,15 @@
 ```
 "혈액투석 환자는 칼륨·인·나트륨을 넘기면 위험합니다.
 그런데 매 끼 무엇을 얼마나 먹어야 하는지 계산해주는 서비스는 없습니다.
-KOOK은 개인 기준을 세우고, AI가 한 끼를 만들고, 기준을 넘으면 스스로 고칩니다."
+FOOK은 개인 기준을 세우고, AI가 한 끼를 만들고, 기준을 넘으면 스스로 고칩니다."
 ```
 
 혈액투석 환자는 **칼륨(K)·인(P)·나트륨(Na)·단백질·열량** 다섯 가지를 동시에 지켜야 합니다.
 하나를 낮추면 다른 하나가 올라가기 때문에, 사람이 손으로 맞추기가 매우 어렵습니다.
 
-KOOK은 이 문제를 **"생성 → 검증 → 재조정 반복"** 구조로 풉니다.
+FOOK은 이 문제를 **"생성 → 검증 → 재조정 반복"** 구조로 풉니다.
 
-| 구분 | 일반 식단 추천 서비스 | KOOK |
+| 구분 | 일반 식단 추천 서비스 | FOOK |
 |:---:|:---:|:---:|
 | **기준** | 일반인 권장량 | ✅ **투석 환자 임상 지침 · 표준체중 기반 개인 산출** |
 | **추천 단위** | 메뉴 조합 | ✅ **메뉴 + 재료별 섭취량(g)** |

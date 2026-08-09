@@ -348,17 +348,17 @@ function parseLocalIngredient(raw: string): [string, number] {
   const m = raw.match(/^(.*?)\s+([\d.]+)\s*g$/);
   return m ? [m[1], Number(m[2])] : [raw, 0];
 }
-// 브랜드 로고. 사용자가 직접 준비한 kook-logo.png가 있으면 그걸 쓰고,
-// 없으면 같은 폴더의 kook-logo.svg(코드로 그린 동일 디자인)로 자동 대체한다.
+// 브랜드 로고. 사용자가 직접 준비한 fook-logo.png가 있으면 그걸 쓰고,
+// 없으면 같은 폴더의 fook-logo.svg(코드로 그린 동일 디자인)로 자동 대체한다.
 function Logo({ className = "" }: { className?: string }) {
   return (
     <img
       className={className}
-      src="/assets/kook-logo.png"
-      alt="KOOK"
+      src="/assets/fook-logo.png"
+      alt="FOOK"
       onError={(e) => {
         const img = e.currentTarget;
-        if (!img.src.endsWith(".svg")) img.src = "/assets/kook-logo.svg";
+        if (!img.src.endsWith(".svg")) img.src = "/assets/fook-logo.svg";
       }}
     />
   );
@@ -832,7 +832,7 @@ function BackHeader({
         {/* 어느 화면에 있어도 브랜드가 보이도록 왼쪽 위에 로고를 둔다. 누르면 홈으로. */}
         <button
           className="header-brand"
-          aria-label="KOOK 홈으로"
+          aria-label="FOOK 홈으로"
           onClick={() => nav("/home")}
         >
           <Logo />
@@ -921,7 +921,7 @@ function Splash({ onStart }: { onStart: () => void }) {
           <div className="splash-frame">
             <img
               src="/assets/onboarding-home.png"
-              alt="오늘 뭐 해 먹지? 고민에 푹 빠질 땐 KOOK이 도와드립니다"
+              alt="오늘 뭐 해 먹지? 고민에 푹 빠질 땐 FOOK이 도와드립니다"
               onError={() => setShotFailed(true)}
             />
             {/* 그림 속 '시작하기' 버튼 위에 겹치는 투명 버튼 */}
@@ -949,7 +949,7 @@ function Splash({ onStart }: { onStart: () => void }) {
         <p className="splash-sub">
           고민에 <b>푹</b> 빠질 땐,
           <br />
-          <b>KOOK(쿡)</b>이 도와드립니다
+          <b>FOOK(푹)</b>이 도와드립니다
         </p>
         <div className="thought-bubble">
           {[
@@ -1104,7 +1104,7 @@ function OnboardingVisual({ type }: { type: string }) {
   if (type === "nutrition")
     return (
       <div className="visual-card preview-card">
-        <NutrientIconRow caption="KOOK AI가 영양 기준 적합 여부를 판정합니다." />
+        <NutrientIconRow caption="FOOK AI가 영양 기준 적합 여부를 판정합니다." />
         <Nutrients
           values={{
             energy: 620,
@@ -1135,7 +1135,7 @@ function OnboardingVisual({ type }: { type: string }) {
           </span>
           <b>레시피 재구성 중입니다</b>
           <small>
-            KOOK AI가 영양 밸런스를 맞추고 있어요...
+            FOOK AI가 영양 밸런스를 맞추고 있어요...
             <br />
             잠시만 기다려주세요
           </small>
@@ -1259,7 +1259,7 @@ function Login() {
           <span />♥<span />
         </div>
         <p className="login-sub">
-          건강한 한 끼, <b>KOOK</b>이 함께합니다.
+          건강한 한 끼, <b>FOOK</b>이 함께합니다.
         </p>
       </div>
       <div className="form login-form">
@@ -1965,7 +1965,7 @@ function Home() {
         안녕하세요, <b>{user?.name || "회원"}님!</b>
       </h1>
       <p className="sub">
-        건강한 한 끼, <b className="brand-word">KOOK</b>이 함께합니다.
+        건강한 한 끼, <b className="brand-word">FOOK</b>이 함께합니다.
       </p>
       {/* 목업 1: 음식 검색 / 재료 검색 / 랜덤 추천 3분할 카드 */}
       <div className="quick-cards">
@@ -2140,7 +2140,7 @@ function Home() {
             <p>
               먹고 싶은 음식을 고르지 않아도
               <br />
-              KOOK AI가 영양 기준에 맞는 한 끼를 만들어드려요.
+              FOOK AI가 영양 기준에 맞는 한 끼를 만들어드려요.
             </p>
             <div className="ask-actions">
               <button
@@ -2543,7 +2543,7 @@ function Adjusting() {
         </span>
         <b>레시피 재구성 중입니다</b>
         <small>
-          KOOK AI가 영양 밸런스를 맞추고 있어요...
+          FOOK AI가 영양 밸런스를 맞추고 있어요...
           <br />
           잠시만 기다려주세요
         </small>
@@ -3502,7 +3502,7 @@ function PdfPreview() {
         w,
         h,
       );
-      pdf.save(`KOOK_${plan.menus[1]}_맞춤한끼.pdf`);
+      pdf.save(`FOOK_${plan.menus[1]}_맞춤한끼.pdf`);
       if (currentUser())
         await saveEverywhere("fook:documents", {
           id: `pdf-${Date.now()}`,
@@ -3534,7 +3534,7 @@ function PdfPreview() {
         <div className="pdf-brand">
           <Logo />
           <div>
-            <b>KOOK 맞춤 한 끼 레시피</b>
+            <b>FOOK 맞춤 한 끼 레시피</b>
             <span>혈액투석 환자용 식단 참고 자료</span>
           </div>
         </div>
@@ -3746,7 +3746,7 @@ function SavedCard({
 }) {
   return (
     <article>
-      <div className="saved-thumb">{mode === "documents" ? "PDF" : "KOOK"}</div>
+      <div className="saved-thumb">{mode === "documents" ? "PDF" : "FOOK"}</div>
       <button className="saved-main" onClick={() => onOpen(item)}>
         <b>{item.title}</b>
         <span>{item.subtitle}</span>
@@ -3807,7 +3807,7 @@ function LibraryPage({
       footer={<BottomNav active={mode === "favorites" ? "favorites" : "history"} />}
     >
       <BackHeader title={meta[0]} />
-      <p className="eyebrow">MY KOOK</p>
+      <p className="eyebrow">MY FOOK</p>
       <h1>{meta[0]}</h1>
       <p className="sub">{meta[1]}</p>
       {loading && (

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-server_FOOK.py — KOOK 백엔드 (FastAPI)
+server_FOOK.py — FOOK 백엔드 (FastAPI)
 
 두 갈래의 기능을 한 서버에서 제공한다.
   - 회원 기능: 회원가입/로그인/세션/프로필/식단기록/즐겨찾기/PDF보관함/장바구니
